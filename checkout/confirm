@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Confirm Order</title>
+        <link rel="stylesheet" type="text/css" href="/css/main-0.0.1.css"> 
+		<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+        <link rel="icon" type="image/png" href="/img/favicon.1.png" />
+	</head>
+	<body>
+        <div id="header-prefix" class="container container-header-prefix"></div>
+    	<div id="header" class="container container-header"></div>
+        <div id="header-error" class="header-error hide"></div>
+    	<div id="hamburger-menu-open" class="container container-menu-expanded hide"></div>
+        <div class="container container-white-bg container-padded container-first">
+
+
+            <section-full><div class="section-title">Confirm Order</div></section-full>
+            <section-full-no-top-margin id="confirm-detail-body" class="hide">
+
+                <div class="section-text">
+                    <div id="confirm-information-wrapper" class="information-wrapper"></div>
+                    <div id="confirm-action-message" class="information-wrapper action-message hide"></div>
+                </div>
+                <div id="confirm-detial-general-notification" class="account-my-information-note"></div>
+                <div id="item-information-sub-header" class="cart-sub-header">PRODUCTS</div>
+                <div id="item-information-detail-wrapper" class="cart-details">
+                    <table id="sku-table" class="cart-details">
+                        <tr>
+                            <th class="cart-details-item-table-image"></th>
+                            <th class="cart-details-item-table-title">Item</th>
+                            <th class="cart-details-item-table-price">Price</th>
+                            <th class="cart-details-item-table-quantity">Quantity</th>
+                            <th class="cart-details-item-table-price">Subtotal</th>
+                        </tr>
+                    </table>
+                </div>
+                <div id="shipping-cost-sub-header" class="cart-sub-header">SHIPPING METHOD</div>
+                <div id="shipping-information" class="account-section-details">
+                    <div id="shipping-methods" class="account-item"></div>
+                    <div id="shipping-method-error" class="login-form-error-text-hidden"></div>
+                </div>
+                <div id="discount-codes-sub-header" class="cart-sub-header">DISCOUNT CODES</div>
+                <div id="discount-code-detail-wrapper" class="cart-details">
+                    <table id="discount-code-table" class="cart-discount-codes">
+                        <tr>
+                            <th class="cart-details-item-table-title">Discount Code</th>
+                            <th class="cart-details-item-table-title">Value</th>
+                            <th class="cart-details-item-table-quantity">Combinable</th>
+                        </tr>
+                    </table>
+                </div>
+                <div id="confirm-total-sub-header" class="cart-sub-header">ITEM AND SHIPPING TOTAL COST</div>
+                <div id="confirm-total-detail-wrapper" class="cart-totals-wrapper">
+                    <table id="confirm-total-table" class="cart-totals-table">
+                    </table>
+                </div>
+                <div id="shipping-address-sub-header" class="cart-sub-header hide">SHIPPING ADDRESS</div>
+                <div id="shipping-address-detail-wrapper" class="cart-totals-wrapper hide">
+                    <div id="shipping-address-details" class="account-item">
+                    </div>
+                </div>
+                <div id="billing-address-sub-header" class="cart-sub-header hide">BILLING ADDRESS</div>
+                <div id="billing-address-detail-wrapper" class="cart-totals-wrapper hide">
+                    <div id="billing-address-details" class="account-item">
+                    </div>
+                </div>
+                <div id="payment-information-sub-header" class="cart-sub-header hide">PAYMENT INFORMATION</div>
+                <div id="payment-information-detail-wrapper" class="cart-totals-wrapper hide">
+                </div>
+                <div id="confirmation-email-sub-header" class="cart-sub-header hide">CONFIRMATION EMAIL ADDRESS</div>
+                <div id="confirmation-email-detail-wrapper" class="cart-totals-wrapper hide">
+                </div>
+
+                <div id="login-create-account-continue-anon-subheader" class="cart-sub-header hide">TO CHECKOUT PLEASE SELECT ONE OF THESE OPTIONS</div>
+                <div id="login-create-account-continue-anon-wrapper" class="confirm-login-button-wrapper hide">
+                    <div id="confirm-login-button" class="confirm-login-button">
+                        <a id="confirm-login-link" href="/login?next=checkout/confirm"><span class="confirm-login-button-span">LOGIN</span></a>
+                    </div>
+                    <div id="confirm-create-account-button" class="confirm-login-button">
+                        <a id="confirm-create-account-link" href="/create-account?next=checkout/confirm"><span class="confirm-login-button-span">CREATE ACCOUNT</span></a>
+                    </div>
+                    <div id="confirm-anonymouns-button" class="confirm-login-button">
+                        <span class="confirm-login-button-span">CHECKOUT ANONYMOUS</span>
+                    </div>
+                </div>
+
+                <div id="confirm-anonymous-email-address-wrapper" class="confirm-anonymous-email-address-wrapper hide">
+                    <div class="confirm-anonymous-email-address-instructions">
+                        Please enter your email address:
+                    </div>
+                    <div class="confirm-anonymous-email-address-input">
+                        <input type="text" id="confirm-anonymous-email-address" class="confirm-anonymous-email-address-text-box" maxlength="254" placeholder="Email Address *">
+                    </div>
+                    <div id="confirm-anonymous-email-address-error" class="login-form-error-text-hidden"></div>
+                    <div id="login-create-account-continue-anon-button-wrapper" class="confirm-anonymous-email-address-continue-button-wrapper">
+                        <div id="continue-anonymouns-email-button" class="confirm-anonymous-email-address-continue-button">
+                            <span class="confirm-login-button-span">CONTINUE</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="enter-payment-information-button-wrapper" class="confirm-order-button-wrapper hide">
+                    <div id="enter-payment-information-button" class="confirm-order-button confirm-billing-info-button">
+                        <span id="enter-payment-information-button-span" class="confirm-order-button-span">ENTER PAYMENT & SHIPPING INFO</span>
+                    </div>
+                </div>
+                <div id="confirm-order-payment-shipping-error" class="confirm-order-form-error-text-hidden"></div>
+                <div id="save-shipping-and-billing-info" class="confirm-order-agree-terms-of-sale-wrapper">
+                    <input type="checkbox" class="confirm-order-agree-terms-of-sale-checkbox" id="save-shipping-and-payment-info" title="Save Shipping and Payment Information in My Account">&nbsp;Save shipping and payment information in my account according to our <a href="/terms-of-use" target="_blank">Terms of Use</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a>.
+                </div>
+                <div id="confirm-order-agree-terms-of-sale" class="confirm-order-agree-terms-of-sale-wrapper hide">
+                    <input type="checkbox" class="confirm-order-agree-terms-of-sale-checkbox" id="confirm-order-terms-of-sale-agree" title="Agree to Terms of Sale">&nbsp;By checking this box you agree to the <a href="/terms-of-sale" target="_blank">Terms of Sale</a>.
+                </div>
+                <div id="confirm-order-terms-of-sale-agree-error" class="confirm-order-form-error-text-hidden"></div>
+                <div id="confirm-checkout-button-wrapper-bottom" class="confirm-order-button-wrapper hide">
+                    <div id="place-order-button-bottom" class="confirm-order-button">
+                        <span id="place-order-button-span" class="confirm-order-button-span confirm-order-button-disabled-span">PLACE ORDER</span>
+                    </div>
+                </div>
+            </section-full-no-top-margin>
+        </div>
+        <div id="footerContent"></div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="/js/index-0.0.1.js"></script>
+        <script src="/js/utilities/form-utilities-0.0.1.js"></script>
+        <script src="/js/utilities/rg-utilities-0.0.1.js"></script>
+        <script src="/js/checkout/confirm-0.0.1.js"></script>
+        <script src="https://checkout.stripe.com/checkout.js"></script>
+	</body>
+</html>

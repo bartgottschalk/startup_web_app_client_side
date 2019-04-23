@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /footer.html
+Disallow: /error.html
+Disallow: /menu.html
+Disallow: /header.html
+Disallow: /header-prefix.html
+
+# Temporary while building
+
+# Sitemap
+#Sitemap: https://www.startupwebapp.com/sitemap.xml

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Create Account</title>
+        <link rel="stylesheet" type="text/css" href="/css/main-0.0.1.css"> 
+		<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+        <link rel="icon" type="image/png" href="/img/favicon.1.png" />
+	</head>
+	<body>
+        <div id="header-prefix" class="container container-header-prefix"></div>
+    	<div id="header" class="container container-header"></div>
+        <div id="header-error" class="header-error hide"></div>
+    	<div id="hamburger-menu-open" class="container container-menu-expanded hide"></div>
+        <div class="container container-white-bg container-padded container-first">
+            <section-full><div class="section-title">Create Account</div></section-full>
+            <section-full-no-top-margin>
+                <div class="section-text">
+                    <div class="create-account-wrapper">
+                        <div id="create-account-form-wrapper" class="create-account-form-wrapper">
+                            <div id="create-account-general-error" class="login-form-error-text-hidden"></div>
+                            <form id="create-account-form" autocomplete="on">
+                                <input name="fname" id="create-account-firstname" class="login-text-box" maxlength="30" placeholder="First Name *">
+                                <div id="create-account-firstname-error" class="login-form-error-text-hidden"></div>
+                                <input name="lname" id="create-account-lastname" class="login-text-box" maxlength="150" placeholder="Last Name *">
+                                <div id="create-account-lastname-error" class="login-form-error-text-hidden"></div>
+                                <input type="text" id="create-account-username" class="login-text-box" maxlength="150" placeholder="Username *">
+                                <div id="create-account-username-error" class="login-form-error-text-hidden"></div>
+                                <input name="email" id="create-account-email-address" class="login-text-box" maxlength="254" placeholder="Email Address *">
+                                <div id="create-account-email-address-error" class="login-form-error-text-hidden"></div>
+                                <input type="password" id="create-account-password" class="login-text-box" maxlength="150" placeholder="Password *">
+                                <div id="create-account-password-error" class="login-form-error-text-hidden"></div>
+                                <input type="password" id="create-account-confirm-password" class="login-text-box" maxlength="150" placeholder="Confirm Password *">
+                                <div id="create-account-confirm-password-error" class="login-form-error-text-hidden"></div>
+                                <div class="login-remember-me-wrapper">
+                                    <input type="checkbox" class="login-remember-me-checkbox" id="newsletter" title="Sign Up for Newsletter">&nbsp;Sign Up for Newsletter
+                                </div>
+                                <div class="login-remember-me-wrapper">
+                                    <input type="checkbox" class="login-remember-me-checkbox" id="remember_me" title="Remember Me">&nbsp;Keep me logged in
+                                </div>
+                                <div class="login-remember-me-wrapper login-reset-password-wrapper">
+                                    <input type="checkbox" class="login-remember-me-checkbox" id="terms-of-use-agree" title="Agree to Terms of Use and Privacy Policy">&nbsp;This site uses cookies, beacons and similar technologies to personalize and improve your experience. I have read and agree to the <a href="/terms-of-use" target="_blank">Terms of Use</a> including our use of cookies and our <a href="/privacy-policy" target="_blank">Privacy Policy</a>
+                                </div>
+                                <div id="create-account-terms-of-use-agree-error" class="login-form-error-text-hidden"></div>
+                                <div id="go-button-wrapper">
+                                    <div class="login-go-button-wrapper">
+                                        <input id="create-account-go" type="submit" class="login-go-button" value="CREATE ACCOUNT">
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="login-reset-password-wrapper">
+                                <a href="/login">Back to Login</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section-full-no-top-margin>
+        </div>
+        <div id="footerContent"></div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="/js/index-0.0.1.js"></script>
+        <script src="/js/utilities/form-utilities-0.0.1.js"></script>
+        <script src="/js/utilities/rg-utilities-0.0.1.js"></script>
+        <script src="/js/create-account-0.0.1.js"></script>
+	</body>
+</html>

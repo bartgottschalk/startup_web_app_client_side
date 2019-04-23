@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Shopping Cart</title>
+        <link rel="stylesheet" type="text/css" href="/css/main-0.0.1.css"> 
+		<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+        <link rel="icon" type="image/png" href="/img/favicon.1.png" />
+	</head>
+	<body>
+        <div id="header-prefix" class="container container-header-prefix"></div>
+    	<div id="header" class="container container-header"></div>
+        <div id="header-error" class="header-error hide"></div>
+    	<div id="hamburger-menu-open" class="container container-menu-expanded hide"></div>
+        <div class="container container-white-bg container-padded container-first">
+
+
+            <section-full><div class="section-title">Shopping Cart</div></section-full>
+            <section-full-no-top-margin id="cart-detail-body" class="hide">
+
+                <div class="section-text">
+                    <div id="cart-information-wrapper" class="information-wrapper"></div>
+                    <div id="cart-action-message" class="information-wrapper action-message hide"></div>
+                </div>
+                <div id="cart-checkout-button-wrapper-top" class="cart-checkout-button-wrapper">
+                    <div id="cart-checkout-button-top" class="cart-checkout-button">
+                        <a href="/checkout/confirm"><span class="cart-checkout-button-span">CHECKOUT</span></a>
+                    </div>
+                </div>
+                <div id="cart-detial-general-notification" class="account-my-information-note"></div>
+                <div id="item-information-sub-header" class="cart-sub-header">PRODUCTS</div>
+                <div id="item-information-detail-wrapper" class="cart-details">
+                    <table id="sku-table" class="cart-details">
+                        <tr>
+                            <th class="cart-details-item-table-image"></th>
+                            <th class="cart-details-item-table-title">Item</th>
+                            <th class="cart-details-item-table-price">Price</th>
+                            <th class="cart-details-item-table-quantity">Quantity</th>
+                            <th class="cart-details-item-table-price">Subtotal</th>
+                            <th class="cart-details-item-table-price"></th>
+                        </tr>
+                    </table>
+                </div>
+                <div id="shipping-cost-sub-header" class="cart-sub-header">SELECT SHIPPING METHOD</div>
+                <div id="shipping-information" class="account-section-details">
+                    <div class="account-item"><span class="account-my-information-label">United States Only</span> <span class="cart-inventory-note">[International Shipping is Not Available at This Time]</span></div>
+                    <div id="shipping-methods" class="account-item"><span class="account-my-information-label">Shipping Option:</span></div>
+                    <div id="shipping-method-error" class="login-form-error-text-hidden"></div>
+                </div>
+                <div id="discount-codes-sub-header" class="cart-sub-header">DISCOUNT CODES</div>
+                <div id="discount-codes-new" class="account-section-details">
+                    <div class="account-item"><input type="text" id="new_discount_code" class="cart-discount-code-text-box" placeholder="enter discount code" maxlength="100" value=""><span id="apply-discount-code-link" class="cart-apply-discount-code-alink">APPLY</span></div>
+                    <div id="new-discount-code-error" class="login-form-error-text-hidden"></div>
+                </div>
+
+                <div id="discount-code-detail-wrapper" class="cart-details">
+                    <table id="discount-code-table" class="cart-discount-codes">
+                        <tr>
+                            <th class="cart-details-item-table-title">Discount Code</th>
+                            <th class="cart-details-item-table-title">Value</th>
+                            <th class="cart-details-item-table-quantity">Combinable</th>
+                            <th class="cart-details-item-table-remove"></th>
+                        </tr>
+                    </table>
+                </div>
+                <div id="cart-total-sub-header" class="cart-sub-header">ITEM AND SHIPPING TOTAL COST</div>
+                <div id="cart-total-detail-wrapper" class="cart-totals-wrapper">
+                    <table id="cart-total-table" class="cart-totals-table">
+                    </table>
+                </div>
+                <div id="cart-checkout-button-wrapper-bottom" class="cart-checkout-button-wrapper">
+                    <div id="cart-checkout-button-bottom" class="cart-checkout-button">
+                        <a href="/checkout/confirm"><span class="cart-checkout-button-span">CHECKOUT</span></a>
+                    </div>
+                </div>
+            </section-full-no-top-margin>
+
+
+
+
+        </div>
+        <div id="footerContent"></div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="/js/index-0.0.1.js"></script>
+        <script src="/js/utilities/form-utilities-0.0.1.js"></script>
+        <script src="/js/utilities/rg-utilities-0.0.1.js"></script>
+        <script src="/js/cart-0.0.1.js"></script>
+	</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Edit My Information</title>
+        <link rel="stylesheet" type="text/css" href="/css/main-0.0.1.css"> 
+		<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+        <link rel="icon" type="image/png" href="/img/favicon.1.png" />
+	</head>
+	<body>
+        <div id="header-prefix" class="container container-header-prefix"></div>
+    	<div id="header" class="container container-header"></div>
+        <div id="header-error" class="header-error hide"></div>
+    	<div id="hamburger-menu-open" class="container container-menu-expanded hide"></div>
+        <div class="container container-white-bg container-padded container-first">
+            <section-full><div class="section-title hide">Edit My Information</div></section-full>
+            <section-full-no-top-margin>
+                <div class="section-text">
+                    <div class="create-account-wrapper">
+                        <div id="edit-my-information-form-wrapper" class="create-account-form-wrapper hide">
+                            <div id="my-information-sub-header" class="account-sub-header">MY INFORMATION</div>
+                            <div id="edit-my-information-general-error" class="login-form-error-text-hidden"></div>
+                            <div class="account-static-item"><span class="account-my-information-label">Username</span>: <span id="edit-my-information-username" class="account-my-information-value"></span></div>
+                            <input type="text" id="edit-my-information-firstname" class="login-text-box" maxlength="30" placeholder="First Name *">
+                            <div id="edit-my-information-firstname-error" class="login-form-error-text-hidden"></div>
+                            <input type="text" id="edit-my-information-lastname" class="login-text-box" maxlength="150" placeholder="Last Name *">
+                            <div id="edit-my-information-lastname-error" class="login-form-error-text-hidden"></div>
+                            <input type="text" id="edit-my-information-email-address" class="login-text-box" maxlength="254" placeholder="Email Address *">
+                            <div id="edit-my-information-email-address-error" class="login-form-error-text-hidden"></div>
+                            <div id="go-button-wrapper">
+                                <div class="login-go-button-wrapper">
+                                    <input id="edit-my-information-go" type="submit" class="login-go-button" value="SAVE">
+                                </div>
+                            </div>
+                            <div id="cancel-wrapper" class="login-reset-password-wrapper">
+                                <a href="/account">Cancel - Back to My Account</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section-full-no-top-margin>
+        </div>
+        <div id="footerContent"></div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="/js/index-0.0.1.js"></script>
+        <script src="/js/utilities/form-utilities-0.0.1.js"></script>
+        <script src="/js/utilities/rg-utilities-0.0.1.js"></script>
+        <script src="/js/account/edit-my-information-0.0.1.js"></script>
+	</body>
+</html>
