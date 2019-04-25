@@ -1355,14 +1355,14 @@ a.contact-email-link:active {
 .sudo-breadcrumb{
     font-size: 0.8em;   
     font-weight: bold;
-    color: #62b800;
+    color: #3399ff;
 }
 .sudo-breadcrumb a:link {
     text-decoration: none;
-    color: #62b800;
+    color: #3399ff;
 }
 .sudo-breadcrumb a:visited {
-    color: #62b800;
+    color: #3399ff;
 }
 .sudo-breadcrumb a:hover {
     text-decoration: none;
