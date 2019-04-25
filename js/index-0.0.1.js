@@ -639,17 +639,7 @@ $.check_termsofserviceisagreed_cookie = function () {
 		$("#chat-icon-close").addClass('hide');
 		$("#chat-dialogue-wrapper").addClass('hide');
 
-		var terms_and_conditions_agree_content = '<div>' + 
-													 '<div class="footer-fixed-content">' + 
-														 'StartupWebApp.com uses cookies, beacons and similar technologies to personalize and improve your experience. By using the Web Site, you are agreeing to our <a id="terms_and_conditions_agree_terms_of_use_link" href="/terms-of-use" target="_blank">Terms of Use</a> including our use of cookies and our <a id="terms_and_conditions_agree_privacy_policy_link" href="/privacy-policy" target="_blank">Privacy Policy</a>.' + 
-														 '<br/>' + 
-														 '<br/>' + 
-														 '<span class="footer-fixed-action-link">Accept and Close</span>' + 
-													 '</div>' + 
-												 '</div>';
-		var $terms_and_conditions_agree_div = $(terms_and_conditions_agree_content).appendTo('body');
-		$terms_and_conditions_agree_div.attr('id', 'terms-and-conditions-agree-div');	
-		$terms_and_conditions_agree_div.addClass('footer-fixed');	
+		$('#terms-and-conditions-agree-div').removeClass('hide');
 		$(".footer-fixed-action-link").click(function() {
 			$.terms_and_conditions_agree_action();
 		});		
@@ -658,8 +648,7 @@ $.check_termsofserviceisagreed_cookie = function () {
 
 $.terms_and_conditions_agree_action = function () {
 	//console.log('terms_and_conditions_agree_action called');
-	//$('#terms-and-conditions-agree-scrolling-div').remove();
-	$('#terms-and-conditions-agree-div').remove();
+	$('#terms-and-conditions-agree-div').addClass('hide');
 	$.setCookie('termsofserviceagreed', 'true', 1825);
 
 	$("#chat-icon").removeClass('hide');
@@ -670,27 +659,6 @@ logout_successful = function( data, textStatus, xhr ) {
 	//console.log('logout successful');
 	window.location = "/login";
 }
-
-/*
-$(window).on("load", function() {
-	// position expanded hamburger menu based on header height
-
-	//$('.container-menu-expanded').css('top', $('.container-header').outerHeight(true));
-})
-*/
-
-/*
-// fix for iOS 10.x and before (should have no negative impact on newer OSs because the element has already been positioned correctly)
-$(window).on('orientationchange', function(event) {
-	var delayInMilliseconds = 400; //0.4 second
-
-	setTimeout(function() {
-		// position expanded hamburger menu based on header height
-		//$('.container-menu-expanded').css('top', $('.container-header').outerHeight(true));
-	}, delayInMilliseconds);
-
-});
-*/
 
 $.urlParam = function(name) {
 	var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);

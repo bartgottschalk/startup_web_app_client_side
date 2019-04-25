@@ -152,6 +152,7 @@ a:active {
     line-height: 25px;
     color: #00264d;
     display: inline-block;
+    font-size: 0.9em;
 }
 .header-prefix-twitter-wrapper {
     width: 10%;
@@ -2105,9 +2106,15 @@ a.contact-email-link:active {
 	100% { transform: rotate(360deg); }
 }
 
+@media only screen and (min-width: 400px) {
+    .header-prefix-phone-number-wrapper {
+        font-size: 1.1em;
+    }
+}
+
 @media only screen and (min-width: 550px) {
     .header-phone-number-wrapper {
-        width: 120px;
+        width: 110px;
         line-height: 20px;
         font-size: 0.9em;
         display: inline-block;
