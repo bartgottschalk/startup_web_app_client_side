@@ -105,7 +105,7 @@ phases:
     commands:
       - echo Build started on `date`
       - cd $CODEBUILD_SRC_DIR_DjangoAPIApp
-      - cd api_startupwebapp
+      - cd StartupWebApp
 
       # functions tests
       - python3 manage.py test functional_tests
