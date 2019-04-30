@@ -90,7 +90,7 @@ phases:
 
       # setup django test app
       - cd $CODEBUILD_SRC_DIR_DjangoAPIApp
-      - cd api_startupwebapp/api_startupwebapp
+      - cd StartupWebApp/StartupWebApp
       - echo "$SETTINGS_SECRET_SRC" > settings_secret.py
 
       # setup hosts file for both static web app served by nginx and for django test app
