@@ -1,0 +1,40 @@
+version: 0.2
+
+env:
+  variables:
+    AWS_DEFAULT_REGION: "us-west-2"
+
+phases:
+  install:
+    commands:
+
+  pre_build:
+    commands:
+
+  build:
+    commands:
+      # =================================
+      # MOVE FILES TO CORRECT DESTINATION
+      # =================================
+      - echo ${BUCKET_NAME}
+      # image files
+      - aws s3 sync --delete --cache-control max-age=31536000 --exclude "*" --include "img/*" . "s3://${BUCKET_NAME}"
+      # .css files
+      - aws s3 sync --delete --cache-control max-age=31536000 --exclude "*" --include "css/*.css" . "s3://${BUCKET_NAME}"
+      # .js files
+      - aws s3 sync --delete --cache-control max-age=31536000 --exclude "*" --include "js/*.js" . "s3://${BUCKET_NAME}"
+      # robots.txt files
+      - aws s3 sync --delete --cache-control max-age=3600 --exclude "*" --include "robots.txt" . "s3://${BUCKET_NAME}"
+      # sitemap.xml
+      - aws s3 sync --delete --cache-control max-age=3600 --exclude "*" --include "sitemap.xml" . "s3://${BUCKET_NAME}"
+      # .html files
+      - aws s3 sync --delete --metadata-directive REPLACE --content-type "text/html" --cache-control max-age=3600 --exclude "*" --include "*.html" --exclude "unittests/*" . "s3://${BUCKET_NAME}"
+      # no extention files
+      - aws s3 sync --delete --metadata-directive REPLACE --content-type "text/html" --cache-control max-age=3600 --exclude "*" --include "about" --include "cart" --include "contact" --include "products" --include "product" --include "terms-of-use" --include "privacy-policy" --include "terms-of-sale" --include "login" --include "account" --include "create-account" --include "reset-password" --include "set-new-password" --include "forgot-username" --include "account/change-password" --include "account/edit-communication-preferences" --include "account/edit-my-information" --include "account/order" --include "account/email-unsubscribe" --include "checkout/confirm" . "s3://${BUCKET_NAME}"
+
+  post_build:
+    commands:
+      - echo Build completed on `date`
+
+artifacts:
+  files:

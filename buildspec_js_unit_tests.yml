@@ -1,0 +1,45 @@
+version: 0.2
+
+env:
+  variables:
+    AWS_DEFAULT_REGION: "us-west-2"
+
+phases:
+  install:
+    commands:
+      #- sudo apt-get update
+      #- sudo apt-get install nodejs -y
+      #- cd ~
+      #- curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh  
+      #- sudo bash nodesource_setup.sh
+      #- sudo apt-get install nodejs -y
+      #- nodejs -v
+      #- sudo apt-get install build-essential -y
+      #- npm -v
+      #- npm install -g npm@latest
+      #- npm -v
+      #- sudo apt-get install npm -y
+      # - echo Installing Mocha...
+      # - npm install -g mocha
+
+  pre_build:
+    commands:
+      #- echo Installing source NPM dependencies...
+      #- sudo npm install -g phantomjs-prebuilt --unsafe-perm
+      #- phantomjs --version
+      #- npm install -g qunit-phantomjs-runner
+      #- find / -name "qunit-phantomjs-runner"
+      # - npm install unit.js
+      #- npm install jquery
+      #- npm install -g qunit
+      #- npm i node-qunit
+
+  build:
+    commands:
+      - echo Build started on `date`
+      - phantomjs /usr/lib/node_modules/qunit-phantomjs-runner/runner.js $CODEBUILD_SRC_DIR/unittests/index_tests.html
+
+  post_build:
+    commands:
+artifacts:
+  files:
