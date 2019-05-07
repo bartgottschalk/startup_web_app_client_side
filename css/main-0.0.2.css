@@ -2097,6 +2097,22 @@ a.contact-email-link:active {
     */
 }
 
+.non-wrapping-image {
+    width: 70%;
+    margin: 0 15%;
+    height: auto;
+    float: none;
+}
+
+.thank-you {
+    margin: 10px 20%;
+    padding: 2%;
+    width: 60%;
+    background-color: #00264d;
+    text-align: center;
+    color: white;
+}
+
 /* Safari */
 @-webkit-keyframes spin {
 	0% { -webkit-transform: rotate(0deg); }
@@ -2248,6 +2264,11 @@ a.contact-email-link:active {
     .chat-dialogue-wrapper {
         width: 50%;
     }
+    .non-wrapping-image {
+        width: 50%;
+        margin: 0 25%;
+        float: none;
+    }
 }
 @media only screen and (min-width: 861px) {
     .header-phone-number-wrapper {
@@ -2368,6 +2389,11 @@ a.contact-email-link:active {
     .chat-dialogue-wrapper {
         width: 40%;
     }
+    .non-wrapping-image {
+        width: 30%;
+        margin: 0 35%;
+        float: none;
+    }
 }
 @media only screen and (min-width: 1111px) {
 	.legal-text {
@@ -2413,6 +2439,11 @@ a.contact-email-link:active {
     .chat-dialogue-wrapper {
         width: 30%;
     }
+    .non-wrapping-image {
+        width: 20%;
+        margin: 0 40%;
+        float: none;
+    }
 }
 @media only screen and (min-width: 1361px) {
 	.create-account-form-wrapper {
@@ -2453,5 +2484,9 @@ a.contact-email-link:active {
     }
     .chat-dialogue-wrapper {
         width: 25%;
+    }
+    .non-wrapping-image {
+        width: 16%;
+        margin: 0 42%;
     }
 }

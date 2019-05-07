@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>PythonABot</title>
+        <link rel="stylesheet" type="text/css" href="/css/main-0.0.2.css"> 
+        <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+        <link rel="icon" type="image/png" href="/img/favicon.1.png" />
+    </head>
+    <body>
+        <div id="header-prefix" class="container container-header-prefix"></div>
+        <div id="header" class="container container-header"></div>
+        <div id="header-error" class="header-error hide"></div>
+        <div id="hamburger-menu-open" class="container container-menu-expanded hide"></div>
+        <div class="container container-white-bg container-padded container-first">
+            <section-full><div class="section-title">PythonABot</div></section-full>
+            <section-full-no-top-margin>
+                <div class="section-text">
+                    <p id="coming_soon_text">Hi, and thanks for coming to learn more about me! As you might already know my name is PythonABot. I'm a personal assistant robot and you can interact with me by writing in your favorite language - Python! I also write back to you in Python as I assume you prefer to think like a Python interpreter as well! Belive me, it's fun to communicate this way!</p>
+                    <img id="pythonabot-img" alt="PythonABot" class="non-wrapping-image" src="/img/product/pythonabot_1.jpg"/>
+                    <p id="coming_soon_status">My creators aren't quite ready to let you use me, but I should be ready soon! If you want me to notify you when they're ready just give me your email address and I'll let you know!</p>
+                    <p id="coming_soon_features">Here are a few of the things they're teaching me to do:
+                        <ul>
+                            <li>Provide a personalized wake-up routine for each person in the family</li>
+                            <li>Be the best butler/doorman/security guard you've ever had</li>
+                            <li>Motivate you as a fitness coach & yoga instructor</li></ul>
+                    </p>
+
+                    <div id="notify_me_wrapper">
+                        <div id="notify_me_general_error" class="login-form-error-text-hidden"></div>
+                        <div>
+                            <div id="notify_me_email_address_form_wrapper" class="create-account-form-wrapper">
+                                <input type="text" id="notify_me_email_address" class="login-text-box" maxlength="254" placeholder="Email Address Where I Can Reach You">
+                                <div id="notify_me_email_address_error" class="login-form-error-text-hidden"></div>
+                            </div>
+                        </div>
+                        <p id="how_excited_text">I'm also curious to know how excited you are to meet me. Knowing that helps my creators work faster!</p>
+                        <div>
+                            <div id="how_excited_form_wrapper" class="create-account-form-wrapper">
+                                <div id="how_excited_options" class="login-remember-me-wrapper">
+                                    <label for="how_excited_option_1"><div class="radio-button-item">
+                                        <input type="radio" id="how_excited_option_1" name="notify_me_how_excited" class="edit-radio-button" value="1"> I Don't Think We'd Get Along
+                                    </div></label>
+                                    <label for="how_excited_option_2"><div class="radio-button-item">
+                                        <input type="radio" id="how_excited_option_2" name="notify_me_how_excited" class="edit-radio-button" value="2"> Could Be Interesting
+                                    </div></label>
+                                    <label for="how_excited_option_3"><div class="radio-button-item">
+                                        <input type="radio" id="how_excited_option_3" name="notify_me_how_excited" class="edit-radio-button" value="3"> I'd Like To Meet You
+                                    </div></label>
+                                    <label for="how_excited_option_4"><div class="radio-button-item">
+                                        <input type="radio" id="how_excited_option_4" name="notify_me_how_excited" class="edit-radio-button" value="4"> Super Excited
+                                    </div></label>
+                                    <label for="how_excited_option_5"><div class="radio-button-item">
+                                        <input type="radio" id="how_excited_option_5" name="notify_me_how_excited" class="edit-radio-button" value="5"> I Think You're My Soul Mate
+                                    </div></label>
+                                </div>
+                                <div id="how_excited_error" class="login-form-error-text-hidden"></div>
+                                <div id="go-button-wrapper">
+                                    <div class="login-go-button-wrapper">
+                                        <input id="coming_soon_submit_button" type="submit" class="reset-password-go-button" value="SUBMIT">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="coming_soon_success_message" class="hide">
+                        <p id="coming_soon_success_text" class="thank-you">Thanks for sharing your emaill address with me. I'll let you know when I'm ready!</p>
+                    </div>
+                    <div id="coming_soon_undefined_error" class="hide">
+                        <p id="coming_soon_success_text" class="thank-you">There was an error saving your email address. Please refresh the page and try again.</p>
+                    </div>
+                </div>
+            </section-full-no-top-margin>
+        </div>
+        <div id="footerContent"></div>
+        <script src="/js/jquery/3.2.1/jquery.min.js"></script>
+        <script src="/js/index-0.0.2.js"></script>
+        <script src="/js/utilities/form-utilities-0.0.1.js"></script>
+        <script src="/js/utilities/utilities-0.0.1.js"></script>
+        <script src="/js/pythonabot-0.0.2.js"></script>
+    </body>
+</html>
+

@@ -368,6 +368,9 @@ set_logged_in = function( data, textStatus, xhr ) {
 		    case '/index.html':
 		    	$('#menu-home-link').remove();
 		        break;
+		    case '/pythonabot':
+		    	$('#menu-pythonabot-link').remove();
+		        break;
 		    case '/products':
 		    	$('#menu-products-link').remove();
 		        break;
