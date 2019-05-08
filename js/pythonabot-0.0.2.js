@@ -89,12 +89,12 @@ submit_pythonabot_coming_soon = function() {
 						$.get_token(submit_pythonabot_coming_soon);
 					}
 					else {
-			        	$.display_page_fatal_error('notify_me_wrapper');
+			        	$.display_page_fatal_error('notify_me_wrapper', 'We\'re sorry. An error has occurred while saving your data. Please try refreshing the page and try again. If that doesn\'t work, please clear browser cache and cookies and try reloading again.');
 			           	break;
 			    	}
 		        	break;
 		        default:
-		        	$.display_page_fatal_error('notify_me_wrapper');
+		        	$.display_page_fatal_error('notify_me_wrapper', 'We\'re sorry. An error has occurred while saving your data. Please try refreshing the page and try again. If that doesn\'t work, please clear browser cache and cookies and try reloading again.');
 		           	break;
 		    }	        
 		});
