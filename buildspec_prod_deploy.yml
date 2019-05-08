@@ -30,7 +30,7 @@ phases:
       # .html files
       - aws s3 sync --delete --metadata-directive REPLACE --content-type "text/html" --cache-control max-age=3600 --exclude "*" --include "*.html" --exclude "unittests/*" . "s3://${BUCKET_NAME}"
       # no extention files
-      - aws s3 sync --delete --metadata-directive REPLACE --content-type "text/html" --cache-control max-age=3600 --exclude "*" --include "about" --include "cart" --include "contact" --include "products" --include "product" --include "terms-of-use" --include "privacy-policy" --include "terms-of-sale" --include "login" --include "account" --include "create-account" --include "reset-password" --include "set-new-password" --include "forgot-username" --include "account/change-password" --include "account/edit-communication-preferences" --include "account/edit-my-information" --include "account/order" --include "account/email-unsubscribe" --include "checkout/confirm" . "s3://${BUCKET_NAME}"
+      - aws s3 sync --delete --metadata-directive REPLACE --content-type "text/html" --cache-control max-age=3600 --exclude "*" --include "about" --include "cart" --include "contact" --include "pythonabot" --include "products" --include "product" --include "terms-of-use" --include "privacy-policy" --include "terms-of-sale" --include "login" --include "account" --include "create-account" --include "reset-password" --include "set-new-password" --include "forgot-username" --include "account/change-password" --include "account/edit-communication-preferences" --include "account/edit-my-information" --include "account/order" --include "account/email-unsubscribe" --include "checkout/confirm" . "s3://${BUCKET_NAME}"
 
   post_build:
     commands:
