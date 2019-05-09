@@ -34,7 +34,7 @@ set_up_pythonabot_form_listeners = function() {
 submit_pythonabot_coming_soon = function() {
 	//console.log('login clicked');
 
-	email_address_field.attr('class', 'login-text-box');
+	email_address_field.attr('class', 'notify-me-email-text-box');
 	email_address_error.attr('class', 'login-form-error-text-hidden');
 	email_address_error.empty();
 	how_excited_error.attr('class', 'login-form-error-text-hidden');
@@ -45,17 +45,17 @@ submit_pythonabot_coming_soon = function() {
 	//console.log(how_excited_val);
 
 	var email_address_valid = $.isEmailValid(email_address_val, 254);
-	$.display_errors(email_address_valid, email_address_error, email_address_field, "email_address");
+	$.display_errors(email_address_valid, email_address_error, email_address_field, "email_address", false, 'notify-me-email-text-box-error', 'notify-me-error-text');
 
 	var how_excited_valid = true;
 	if (typeof how_excited_val == 'undefined') {
 		how_excited_valid = false;
-		how_excited_error.attr('class', 'login-form-error-text');
+		how_excited_error.attr('class', 'notify-me-error-text');
 		how_excited_error.append("Please select one of the options for how excited you are to meet PythonABot.");		
 	}
 
 	if (email_address_valid.length == 0 && how_excited_valid) {
-	    $(".login-go-button-wrapper").remove();
+	    $(".notify-me-go-button-wrapper").remove();
 	    $("#go-button-wrapper").append('<div class="create-account-loader-wrapper"><div class="create-account-loader"></div></div>');
 
 		var json_data = {"email_address":email_address_val, "how_excited":how_excited_val};
@@ -111,7 +111,7 @@ pythonabot_notify_me_callback = function( data, textStatus, xhr ) {
 	}
 	else if (data['pythonabot_notify_me'] == 'duplicate_prospect') {
 	    $(".create-account-loader-wrapper").remove();
-	    $("#go-button-wrapper").append('<div class="login-go-button-wrapper"><input id="coming_soon_submit_button" type="submit" class="reset-password-go-button" value="SUBMIT"></div>');
+	    $("#go-button-wrapper").append('<div class="notify-me-go-button-wrapper"><input id="coming_soon_submit_button" type="submit" class="notify-me-go-button" value="SUBMIT"></div>');
 
 		$.bind_key_to_form_submit_button(email_address_field, "enterKey", $('#coming_soon_submit_button'), 13);
 		$.bind_key_to_form_submit_button(notify_me_how_excited_radio_option, "enterKey", $('#coming_soon_submit_button'), 13);	
@@ -128,7 +128,7 @@ pythonabot_notify_me_callback = function( data, textStatus, xhr ) {
 	else {
 	    $(".create-account-loader-wrapper").remove();
 		// show some error message
-		$("#notify_me_general_error").attr('class', 'login-form-error-text');
+		$("#notify_me_general_error").attr('class', 'notify-me-error-text');
 		$("#notify_me_general_error").append("There was an error submitting your data. Please check the values and try again. [E: 01]");
 	}
 }

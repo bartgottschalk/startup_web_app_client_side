@@ -2113,6 +2113,84 @@ a.contact-email-link:active {
     color: white;
 }
 
+.notify-me-form-wrapper {
+    width: 94%;
+    margin: 0 3%;
+    text-align: center; 
+    display: inline-block;
+}
+.notify-me-error-text {
+    margin: 0px auto;
+    width: 90%;
+    text-align: center; 
+    font-size: 0.8em;       
+    color: red;
+}
+.notify-me-how-excited-wrapper {
+    width: 100%;
+    text-align: left;
+    font-size: 0.8em;   
+    color: #00264d;
+    height: auto;
+    margin: 0 auto;
+    padding: 0;
+    float: center;
+}
+.notify-me-radio-button-item {
+    width: 95%;
+    height: auto;
+    background-color: #F1F1F2;
+    padding: 2%;
+    margin: 10px 0 10px 0;
+    border: 1px solid #D3D3D3;
+    float: left;
+}
+.notify-me-email-text-box {
+    padding: 15px 20px 15px 20px;
+    margin: 10px auto;
+    width: 90%;
+    text-align: left;
+    border: 2px solid #b7b6b7;
+    box-sizing: border-box;
+    font-family: Roboto, sans-serif;
+    font-size: 0.8em;   
+    color: #00264d;
+    outline: none;
+}
+.notify-me-email-text-box-error {
+    padding: 15px 20px 15px 20px;
+    margin: 10px auto;
+    width: 90%;
+    text-align: left;
+    border: 2px solid red;
+    box-sizing: border-box;
+    font-family: Roboto, sans-serif;
+    font-size: 0.8em;   
+    color: #00264d;
+    outline: none;
+}
+
+.notify-me-go-button-wrapper {
+    margin: 10px auto;
+    width: 90%;
+    text-align: center;
+}
+.notify-me-go-button {
+    width: 100%;
+    margin: auto;
+    padding: 7px 12px 7px 12px;
+    background-color: #3399ff;
+    font-size: 0.8em;   
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border: 0px;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+}
+
+
 /* Safari */
 @-webkit-keyframes spin {
 	0% { -webkit-transform: rotate(0deg); }
@@ -2187,6 +2265,13 @@ a.contact-email-link:active {
     }
     .chat-dialogue-wrapper {
         width: 60%;
+    }
+
+    .notify-me-email-text-box {
+        width: 70%;
+    }
+    .notify-me-email-text-box-error {
+        width: 70%;
     }
 }
 
@@ -2269,6 +2354,23 @@ a.contact-email-link:active {
         margin: 0 25%;
         float: none;
     }
+
+    .notify-me-radio-button-item {
+        width: 45%;
+        margin: 10px 1%;
+        padding: 1%;
+    }
+    .notify-me-go-button {
+        width: 50%;
+    }
+
+    .notify-me-email-text-box {
+        width: 60%;
+    }
+    .notify-me-email-text-box-error {
+        width: 60%;
+    }
+
 }
 @media only screen and (min-width: 861px) {
     .header-phone-number-wrapper {
@@ -2394,6 +2496,14 @@ a.contact-email-link:active {
         margin: 0 35%;
         float: none;
     }
+
+    .notify-me-email-text-box {
+        width: 50%;
+    }
+    .notify-me-email-text-box-error {
+        width: 50%;
+    }
+
 }
 @media only screen and (min-width: 1111px) {
 	.legal-text {
@@ -2444,6 +2554,17 @@ a.contact-email-link:active {
         margin: 0 40%;
         float: none;
     }
+    .notify-me-radio-button-item {
+        width: 29%;
+        margin: 10px 1%;
+    }
+    .notify-me-email-text-box {
+        width: 40%;
+    }
+    .notify-me-email-text-box-error {
+        width: 40%;
+    }
+
 }
 @media only screen and (min-width: 1361px) {
 	.create-account-form-wrapper {

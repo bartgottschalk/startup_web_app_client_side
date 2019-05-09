@@ -27,40 +27,36 @@
                             <li>Motivate you as a fitness coach & yoga instructor</li></ul>
                     </p>
 
-                    <div id="notify_me_wrapper">
+                    <div id="notify_me_wrapper" class="notify_me_wrapper">
                         <div id="notify_me_general_error" class="login-form-error-text-hidden"></div>
-                        <div>
-                            <div id="notify_me_email_address_form_wrapper" class="create-account-form-wrapper">
-                                <input type="text" id="notify_me_email_address" class="login-text-box" maxlength="254" placeholder="Email Address Where I Can Reach You">
-                                <div id="notify_me_email_address_error" class="login-form-error-text-hidden"></div>
+                        <div id="notify_me_email_address_form_wrapper" class="notify-me-form-wrapper">
+                            <input type="text" id="notify_me_email_address" class="notify-me-email-text-box" maxlength="254" placeholder="Email Address Where I Can Reach You">
+                            <div id="notify_me_email_address_error" class="login-form-error-text-hidden"></div>
+                        </div>
+                            <p id="how_excited_text">I'm also curious to know how excited you are to meet me. Knowing that helps my creators work faster!</p>
+                        <div id="notify_me_email_address_form_wrapper" class="notify-me-form-wrapper">
+                            <div id="how_excited_options" class="notify-me-how-excited-wrapper">
+                                <label for="how_excited_option_1"><div class="notify-me-radio-button-item">
+                                    <input type="radio" id="how_excited_option_1" name="notify_me_how_excited" class="edit-radio-button" value="1"> I Don't Think We'd Get Along
+                                </div></label>
+                                <label for="how_excited_option_2"><div class="notify-me-radio-button-item">
+                                    <input type="radio" id="how_excited_option_2" name="notify_me_how_excited" class="edit-radio-button" value="2"> Could Be Interesting
+                                </div></label>
+                                <label for="how_excited_option_3"><div class="notify-me-radio-button-item">
+                                    <input type="radio" id="how_excited_option_3" name="notify_me_how_excited" class="edit-radio-button" value="3"> I'd Like To Meet You
+                                </div></label>
+                                <label for="how_excited_option_4"><div class="notify-me-radio-button-item">
+                                    <input type="radio" id="how_excited_option_4" name="notify_me_how_excited" class="edit-radio-button" value="4"> Super Excited
+                                </div></label>
+                                <label for="how_excited_option_5"><div class="notify-me-radio-button-item">
+                                    <input type="radio" id="how_excited_option_5" name="notify_me_how_excited" class="edit-radio-button" value="5"> I Think You're My Soul Mate
+                                </div></label>
                             </div>
                         </div>
-                        <p id="how_excited_text">I'm also curious to know how excited you are to meet me. Knowing that helps my creators work faster!</p>
-                        <div>
-                            <div id="how_excited_form_wrapper" class="create-account-form-wrapper">
-                                <div id="how_excited_options" class="login-remember-me-wrapper">
-                                    <label for="how_excited_option_1"><div class="radio-button-item">
-                                        <input type="radio" id="how_excited_option_1" name="notify_me_how_excited" class="edit-radio-button" value="1"> I Don't Think We'd Get Along
-                                    </div></label>
-                                    <label for="how_excited_option_2"><div class="radio-button-item">
-                                        <input type="radio" id="how_excited_option_2" name="notify_me_how_excited" class="edit-radio-button" value="2"> Could Be Interesting
-                                    </div></label>
-                                    <label for="how_excited_option_3"><div class="radio-button-item">
-                                        <input type="radio" id="how_excited_option_3" name="notify_me_how_excited" class="edit-radio-button" value="3"> I'd Like To Meet You
-                                    </div></label>
-                                    <label for="how_excited_option_4"><div class="radio-button-item">
-                                        <input type="radio" id="how_excited_option_4" name="notify_me_how_excited" class="edit-radio-button" value="4"> Super Excited
-                                    </div></label>
-                                    <label for="how_excited_option_5"><div class="radio-button-item">
-                                        <input type="radio" id="how_excited_option_5" name="notify_me_how_excited" class="edit-radio-button" value="5"> I Think You're My Soul Mate
-                                    </div></label>
-                                </div>
-                                <div id="how_excited_error" class="login-form-error-text-hidden"></div>
-                                <div id="go-button-wrapper">
-                                    <div class="login-go-button-wrapper">
-                                        <input id="coming_soon_submit_button" type="submit" class="reset-password-go-button" value="SUBMIT">
-                                    </div>
-                                </div>
+                        <div id="how_excited_error" class="login-form-error-text-hidden"></div>
+                        <div id="go-button-wrapper" class="notify-me-form-wrapper">
+                            <div class="notify-me-go-button-wrapper">
+                                <input id="coming_soon_submit_button" type="submit" class="notify-me-go-button" value="SUBMIT">
                             </div>
                         </div>
                     </div>
