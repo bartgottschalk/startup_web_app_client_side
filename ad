@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Ad Example</title>
+        <link rel="stylesheet" type="text/css" href="/css/main-0.0.3.css"> 
+		<link href="https://fonts.googleapis.com/css?family=Archivo+Narrow:400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+        <link rel="icon" type="image/png" href="img/favicon.1.png" />
+	</head>
+	<body>
+        <div id="header-prefix" class="container container-header-prefix"></div>
+    	<div id="header" class="container container-header"></div>
+        <div id="header-error" class="header-error hide"></div>
+    	<div id="hamburger-menu-open" class="container container-menu-expanded hide"></div>
+
+        <div class="container container-white-bg container-padded">
+            <section-full><div class="section-title">Ad Example</div></section-full>
+            <section-full>
+                <div class="section-text">
+                    <p id="coming_soon_text" class="contact-email-text">Paid Google Search</p>
+                </div>
+                <div class="section-text">                    
+                    <a id="pythonabot-google-ad-example" href="/pythonabot?ad_cd=E0y04nClr68pywMIyUxn">
+                        <img id="pythonabot-google-ad-example-img" alt="Google Ad Example" class="non-wrapping-image-wide" src="/img/pythonabot_google_ad_4.png"/>
+                    </a>
+                </div>
+                <div class="section-text">
+                    <p id="coming_soon_status" class="contact-email-text">Click on an ad to follow the ad link.</p>
+                </div>
+            </section-full>
+        </div>
+        <div id="footerContent"></div>
+        <script src="/js/jquery/3.2.1/jquery.min.js"></script>
+        <script src="/js/index-0.0.2.js"></script>
+        <script src="/js/utilities/utilities-0.0.1.js"></script>
+        <script src="/js/utilities/form-utilities-0.0.1.js"></script>
+	</body>
+</html>
