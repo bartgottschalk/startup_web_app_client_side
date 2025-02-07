@@ -66,7 +66,7 @@ Note: The function $.env_vars in `~/StartupWebApp/startup_web_app_client_side/js
 
 #### Configure Hosts File
 Configure hosts file to route urls to local
-- local.startupwebapp.com to 127.0.0.1
+- localhost.startupwebapp.com to 127.0.0.1
 - localliveservertestcase.startupwebapp.com to 127.0.0.1 (this will be used to run Selenium functional tests)
 
 #### Test that the static website is responding: 
