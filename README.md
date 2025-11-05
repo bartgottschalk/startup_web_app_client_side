@@ -51,7 +51,7 @@ docker-compose exec -d backend python manage.py runserver 0.0.0.0:8000
 
 ### Frontend Architecture
 
-**Technology**: Static HTML, CSS, and JavaScript (jQuery 3.2.1)
+**Technology**: Static HTML, CSS, and JavaScript (jQuery 3.7.1)
 
 **Key Features**:
 - **Extensionless URLs**: Pages served without `.html` extension (e.g., `/about`, `/contact`, `/cart`)
@@ -90,7 +90,7 @@ Pages are served without `.html` extensions for clean URLs (e.g., `/about` inste
 
 ### jQuery Usage
 
-**Current Version**: jQuery 3.2.1 (May 2017)
+**Current Version**: jQuery 3.7.1 (August 2023)
 
 The application makes extensive use of jQuery for:
 - AJAX calls to backend API
