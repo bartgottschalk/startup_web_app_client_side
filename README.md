@@ -26,7 +26,87 @@ As the only technical co-founder, it landed on me to "figure this out."
 
 This repository contains a simplified version of the client side application I built to launch our startup. To learn more about this project you can check out [slides from a talk I gave about the technical aspects of this project](https://docs.google.com/presentation/d/18Y_G3asKbeys7s5618N_VJkXCI0ePwJ0vKB_06c-P3w/edit#slide=id.g5820c97b01_0_114) or [slides from a talk I gave demoing use of the project for startup idea validation](https://docs.google.com/presentation/d/1O80AyN6jpFxfooDz8ILfYE1PyYlm917mP2EqYuMf5SE/edit#slide=id.g5820c97b01_0_90).
 
-## Getting Started
+## Quick Start with Docker (Recommended)
+
+The easiest way to run this frontend is with Docker Compose alongside the backend API.
+
+### Prerequisites
+- Docker Desktop installed
+- Backend repository cloned as a sibling directory
+
+### Setup
+
+```bash
+cd /path/to/projects
+git clone https://github.com/bartgottschalk/startup_web_app_client_side.git
+git clone https://github.com/bartgottschalk/startup_web_app_server_side.git
+cd startup_web_app_server_side
+docker-compose up -d
+docker-compose exec -d backend python manage.py runserver 0.0.0.0:8000
+```
+
+### Access the Application
+- Frontend: http://localhost:8080
+- Backend API: http://localhost:8000
+
+### Frontend Architecture
+
+**Technology**: Static HTML, CSS, and JavaScript (jQuery 3.2.1)
+
+**Key Features**:
+- **Extensionless URLs**: Pages served without `.html` extension (e.g., `/about`, `/contact`, `/cart`)
+- **Environment Detection**: Automatically detects environment and routes API calls appropriately
+- **Dynamic Content**: Header and footer loaded dynamically via jQuery
+- **REST API Integration**: Communicates with Django backend for user auth, cart, orders
+
+### Environment Detection
+
+The `js/index-0.0.2.js` file automatically detects the running environment and routes API calls:
+
+| Environment | Hostname | API Endpoint | Use Case |
+|------------|----------|-------------|----------|
+| **Docker** | `frontend` | `http://backend:60767` | Docker Compose internal network |
+| **Local Dev** | `localhost` | `http://localhost:8000` | Browser-based development |
+| **Functional Tests** | `localliveservertestcase.startupwebapp.com` | `http://localliveservertestcaseapi.startupwebapp.com:60767` | Selenium tests |
+| **Production** | `www.startupwebapp.com` | `https://api.startupwebapp.com` | Live site |
+
+**How it works**: The `$.env_vars()` function checks `window.location.hostname` and selects the appropriate API URL.
+
+### Extensionless HTML Files
+
+Pages are served without `.html` extensions for clean URLs (e.g., `/about` instead of `/about.html`).
+
+**Files affected**:
+- `about` - About page
+- `contact` - Contact page
+- `cart` - Shopping cart
+- `products` - Product listing
+- `product` - Individual product
+- `login` - User login
+- `create-account` - Account creation
+- And more...
+
+**Nginx configuration**: The backend repository's `nginx.conf` handles MIME type detection. Without this, browsers will download these files instead of rendering them.
+
+### jQuery Usage
+
+**Current Version**: jQuery 3.2.1 (May 2017)
+
+The application makes extensive use of jQuery for:
+- AJAX calls to backend API
+- Dynamic content loading (header, footer)
+- DOM manipulation and event handling
+- Form validation
+- User authentication state management
+
+**Files using jQuery**:
+- `/js/index-0.0.2.js` - Main application logic
+- `/js/utilities/*.js` - Form validation and utilities
+- `/js/cart-0.0.1.js` - Shopping cart
+- `/js/account/*.js` - User account pages
+- And 19 total JavaScript files
+
+## Getting Started (Manual Setup)
 
 These instructions will get you a copy of the project up and running on your local machine for experimentation and/or development purposes.
 

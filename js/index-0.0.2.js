@@ -19,6 +19,14 @@ $.env_vars = function () {
 	var api_url = "https://api.startupwebapp.com";
 
 	switch(window.startupwebapp.util.get_window_location_hostname()) {
+		case 'localhost':
+			// Local development - accessed via localhost:8080
+	    	api_url = 'http://localhost:8000';
+	        break;
+		case 'frontend':
+			// Docker environment - frontend and backend in same network
+	    	api_url = 'http://backend:60767';
+	        break;
 		case 'localliveservertestcase.startupwebapp.com':
 	    	api_url = 'http://localliveservertestcaseapi.startupwebapp.com:60767';
 	        break;
