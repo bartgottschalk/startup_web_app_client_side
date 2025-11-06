@@ -83,7 +83,6 @@ load_account = function( data, textStatus, xhr ) {
 
 
 		$(".section-title").removeClass('hide');
-		$("#my-food-card-library-sub-header").removeClass('hide');
 		$("#my-information-sub-header").removeClass('hide');
 		$("#my-shipping-billing-address-payment-info-sub-header").removeClass('hide');
 		$("#my-communication-preferences-sub-header").removeClass('hide');
