@@ -42,12 +42,19 @@ git clone https://github.com/bartgottschalk/startup_web_app_client_side.git
 git clone https://github.com/bartgottschalk/startup_web_app_server_side.git
 cd startup_web_app_server_side
 docker-compose up -d
+
+# Initialize database (first time only)
+docker-compose exec backend python manage.py migrate
+docker-compose exec backend python manage.py load_sample_data
+
+# Start backend API server
 docker-compose exec -d backend python manage.py runserver 0.0.0.0:8000
 ```
 
 ### Access the Application
 - Frontend: http://localhost:8080
 - Backend API: http://localhost:8000
+- Admin: http://localhost:8000/admin/
 
 ### Frontend Architecture
 

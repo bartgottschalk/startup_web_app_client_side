@@ -21,8 +21,10 @@ This document tracks known issues and incomplete features in the frontend applic
 ## Pre-Existing Frontend Issues
 
 ### 1. Product Detail Page JavaScript Error
+✅ **FIXED** - November 5, 2025 (Backend PR #14)
+
 **File**: `js/product-0.0.1.js:76`
-**Severity**: HIGH
+**Severity**: HIGH (Was blocking product pages)
 
 **Error**:
 ```javascript
@@ -31,38 +33,32 @@ TypeError: undefined is not an object (evaluating 'data['product_data']['title']
 
 **Description**:
 - JavaScript expects API response with `data['product_data']` structure
-- Backend API `/order/product/{identifier}` either doesn't exist or returns different data format
-- Page fails to load product details
+- Backend API `/order/product/{identifier}` was crashing with DoesNotExist error
+- Database was missing required Skuinventory reference records
 
-**Affected URLs**:
-- http://localhost:8080/product?id={any-product-id}
-
-**API Call** (line 21):
-```javascript
-var url_str = env_vars['api_url'] + "/order/product/" + product_identifier;
-```
-
-**Fix Required**:
-- Backend: Implement or repair `/order/product/{identifier}` endpoint
-- OR Frontend: Update JavaScript to match actual API response structure
-- Add sample data to database for testing
+**Resolution** (Backend):
+- Created data migration `0002_add_default_inventory_statuses.py` to automatically create required Skuinventory records
+- Created `load_sample_data` management command to populate database with sample products
+- Fixed CSRF, session, and anonymous cart cookie domain issues
+- Product pages now work correctly in localhost development
+- See: https://github.com/bartgottschalk/startup_web_app_server_side/pull/14
 
 ### 2. Account Pages Redirect Issue
+✅ **FIXED** - November 5, 2025 (Backend PR #14)
+
 **Files**: Various account page handlers
-**Severity**: MEDIUM
+**Severity**: MEDIUM (Was breaking navigation)
 
 **Description**:
-- When accessing account pages without authentication, redirect loses port number
-- URL changes from `http://localhost:8080/account/` → `http://localhost/account/`
-- Results in connection failure
+- When accessing account pages, redirect was losing port number
+- URL changed from `http://localhost:8080/account/` → `http://localhost/account/`
+- Resulted in connection failure
 
-**Affected URLs**:
-- http://localhost:8080/account/
-- http://localhost:8080/account/* (all account pages)
-
-**Fix Required**:
-- Backend: Fix authentication redirect to preserve port number
-- May require updating Django redirect URLs or session configuration
+**Resolution** (Backend):
+- Added `absolute_redirect off;` to `nginx.conf`
+- Nginx now uses relative redirects, preserving original port from browser request
+- All account page navigation now works correctly
+- See: https://github.com/bartgottschalk/startup_web_app_server_side/pull/14
 
 ### 3. QUnit Test Mocking Failures
 **File**: `unittests/js/index_tests.js`
@@ -137,14 +133,13 @@ docker-compose exec -e HEADLESS=TRUE backend python manage.py test functional_te
 ## Next Steps
 
 ### High Priority
-1. **Fix Product Detail API Integration**
-   - Coordinate with backend team to implement `/order/product/{identifier}` endpoint
-   - OR update `js/product-0.0.1.js` to match actual API structure
-   - Load sample product data for testing
+1. ✅ ~~**Fix Product Detail API Integration**~~ - COMPLETED (Backend PR #14)
+   - ✅ Coordinate with backend team to implement `/order/product/{identifier}` endpoint
+   - ✅ Load sample product data for testing
 
-2. **Fix Account Redirect Issue**
-   - Work with backend team to preserve port in authentication redirects
-   - Test all account pages after fix
+2. ✅ ~~**Fix Account Redirect Issue**~~ - COMPLETED (Backend PR #14)
+   - ✅ Work with backend team to preserve port in authentication redirects
+   - ✅ Test all account pages after fix
 
 ### Medium Priority
 3. **Improve QUnit Test Suite**
