@@ -147,6 +147,16 @@ docker-compose exec -e HEADLESS=TRUE backend python manage.py test functional_te
    - Consider adding Sinon.js or similar mocking library
    - Increase test coverage to 100% assertions passing
 
+4. **Expand Test Coverage**
+   - **Current**: Only 3 of 19 JavaScript files have QUnit tests (~16% coverage)
+   - **Files with tests**: index-0.0.2.js, utilities/utilities-0.0.1.js, utilities/form-utilities-0.0.1.js
+   - **Priority files needing tests**:
+     - product-0.0.1.js (product display and SKU selection logic)
+     - cart-0.0.1.js (shopping cart operations)
+     - checkout/confirm-0.0.1.js (order confirmation and totals)
+     - js/utilities/form-utilities-0.0.1.js (form validation - expand existing tests)
+   - **Recommendation**: Add tests incrementally as bugs are fixed or features added
+
 ### Low Priority
 4. **Functional Test Improvements**
    - Help backend team fix Selenium scrolling issues

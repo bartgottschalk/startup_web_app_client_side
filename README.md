@@ -158,7 +158,37 @@ Configure hosts file to route urls to local
 
 #### Test that the static website is responding: 
 Go to http://localhost.startupwebapp.com/
-Expected result: Displays the static home page. Note: if the API is inaccessible there will be errors loading the page and some functinoality will not work. 
+Expected result: Displays the static home page. Note: if the API is inaccessible there will be errors loading the page and some functinoality will not work.
+
+## Code Quality
+
+### Linting
+
+This project uses ESLint 9.39.1 for JavaScript code quality enforcement.
+
+**Run linting:**
+```bash
+npx eslint js/**/*.js
+```
+
+**Current status:** ✅ 0 errors, 0 warnings (100% clean)
+
+**Configuration:** See `eslint.config.js` for rules and globals specific to this jQuery-based application.
+
+### Testing
+
+Frontend unit tests use QUnit 2.9.2.
+
+**Run tests in browser:** http://localhost:8080/unittests/index_tests.html
+
+**Test Coverage Status:**
+- **Tested:** 3 files (index-0.0.2.js, utilities/utilities-0.0.1.js, utilities/form-utilities-0.0.1.js)
+- **Total:** 19 JavaScript files
+- **Coverage:** ~16% of JavaScript files
+- **Future work:** Expand test coverage to remaining files, particularly:
+  - product-0.0.1.js (product display and SKU selection)
+  - cart-0.0.1.js (shopping cart functionality)
+  - checkout/confirm-0.0.1.js (order confirmation)
 
 ## Running tests
 
