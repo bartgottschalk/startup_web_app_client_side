@@ -119,7 +119,7 @@ change_my_password = function() {
     		success: change_my_password_callback,
             beforeSend: function(request) {
 			    //console.log('in beforeSend');
-			    request.setRequestHeader('X-CSRFToken', csrftoken);
+			    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
 		    }
         })
             .fail(function(xhr, textStatus, errorThrown) {

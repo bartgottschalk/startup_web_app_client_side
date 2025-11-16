@@ -147,7 +147,7 @@ update_communication_preferences = function() {
         success: update_communication_preferences_callback,
         beforeSend: function(request) {
 		    //console.log('in beforeSend');
-		    request.setRequestHeader('X-CSRFToken', csrftoken);
+		    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
 	    }
     })
         .fail(function(xhr, textStatus, errorThrown) {

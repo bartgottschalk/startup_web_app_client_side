@@ -133,7 +133,7 @@ email_unsubscribe_confirm = function() {
         success: email_unsubscribe_confirm_callback,
         beforeSend: function(request) {
 		    //console.log('in beforeSend');
-		    request.setRequestHeader('X-CSRFToken', csrftoken);
+		    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
 	    }
     })
         .fail(function(xhr, textStatus, errorThrown) {
@@ -318,7 +318,7 @@ email_unsubscribe_why = function() {
         success: email_unsubscribe_why_callback,
         beforeSend: function(request) {
 		    //console.log('in beforeSend');
-		    request.setRequestHeader('X-CSRFToken', csrftoken);
+		    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
 	    }
     })
         .fail(function(xhr, textStatus, errorThrown) {

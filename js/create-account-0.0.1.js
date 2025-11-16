@@ -180,7 +180,7 @@ create_account = function() {
     		success: create_account_success,
             beforeSend: function(request) {
 			    //console.log('in beforeSend');
-			    request.setRequestHeader('X-CSRFToken', csrftoken);
+			    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
 		    }
         })
             .fail(function() {

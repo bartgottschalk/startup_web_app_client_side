@@ -485,7 +485,7 @@ process_stripe_payment_token = function() {
         success: process_stripe_payment_token_callback,
         beforeSend: function(request) {
 		    //console.log('in beforeSend');
-		    request.setRequestHeader('X-CSRFToken', csrftoken);
+		    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
 	    }
     })
         .fail(function(xhr, textStatus, errorThrown) {
@@ -600,7 +600,7 @@ look_up_anonymous_email_address = function() {
     		success: look_up_anonymous_email_address_callback,
             beforeSend: function(request) {
 			    //console.log('in beforeSend');
-			    request.setRequestHeader('X-CSRFToken', csrftoken);
+			    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
 		    }
         })
             .fail(function(xhr, textStatus, errorThrown) {
@@ -823,7 +823,7 @@ confirm_place_order = function(event) {
             success: confirm_place_order_callback,
             beforeSend: function(request) {
 			    //console.log('in beforeSend');
-			    request.setRequestHeader('X-CSRFToken', csrftoken);
+			    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
 		    }
         })
             .fail(function(xhr, textStatus, errorThrown) {

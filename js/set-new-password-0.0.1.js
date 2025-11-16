@@ -97,7 +97,7 @@ set_new_password = function() {
     		success: set_new_password_callback,
             beforeSend: function(request) {
 			    //console.log('in beforeSend');
-			    request.setRequestHeader('X-CSRFToken', csrftoken);
+			    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
 		    },
         })
             .fail(function(xhr, textStatus, errorThrown) {

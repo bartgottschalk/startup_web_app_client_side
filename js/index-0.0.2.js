@@ -48,7 +48,6 @@ $.env_vars = function () {
     return env_vars;
 };
 var env_vars = $.env_vars();
-var csrftoken;
 var token_retried = false;
 var terms_of_use_version = null;
 var mb_cd = null;
@@ -247,7 +246,7 @@ submit_chat_message = function() {
     		success: submit_chat_message_success,
             beforeSend: function(request) {
 			    //console.log('in beforeSend');
-			    request.setRequestHeader('X-CSRFToken', csrftoken);
+			    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
 		    }
         })
             .fail(function() {
@@ -571,14 +570,7 @@ member_terms_and_conditions_agree_action = function () {
 		    data: json_data,
             success: member_terms_and_conditions_agree_action_success,
             beforeSend: function(request) {
-			    //console.log('in beforeSend: ' + csrftoken);
-			    if (typeof csrftoken === 'undefined'){
-				    csrftoken = $.getCookie('csrftoken');
-				    request.setRequestHeader('X-CSRFToken', csrftoken);
-                }
-                else {
-				    request.setRequestHeader('X-CSRFToken', csrftoken);
-                }
+			    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
 		    }
         })
             .fail(function(xhr, textStatus, errorThrown) {

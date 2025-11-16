@@ -105,6 +105,10 @@ The application makes extensive use of jQuery for:
 - DOM manipulation and event handling
 - Form validation
 - User authentication state management
+- CSRF token management for secure POST requests
+
+**CSRF Token Handling**:
+All AJAX POST requests use `$.getCookie('csrftoken')` to dynamically read the current CSRF token from cookies. This ensures compatibility with Django's CSRF token rotation and prevents 403 Forbidden errors. See technical note `docs/technical-notes/2025-11-16-csrf-token-stale-variable-bug-fix.md` in the server-side repository for details.
 
 **Files using jQuery**:
 - `/js/index-0.0.2.js` - Main application logic
