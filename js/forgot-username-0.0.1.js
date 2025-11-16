@@ -1,4 +1,3 @@
-var csrftoken;
 var env_vars = $.env_vars();
 
 var email_address_field = $('#forgot-username-email-address');

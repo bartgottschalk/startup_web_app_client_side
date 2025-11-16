@@ -1,4 +1,3 @@
-var csrftoken;
 var token_retried = false;
 var env_vars = $.env_vars();
 var email_verification_code;

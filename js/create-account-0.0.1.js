@@ -1,4 +1,3 @@
-var csrftoken;
 var env_vars = $.env_vars();
 
 var firstname_field = $('#create-account-firstname');

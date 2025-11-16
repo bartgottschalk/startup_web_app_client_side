@@ -1,4 +1,3 @@
-var csrftoken;
 var env_vars = $.env_vars();
 
 var general_error = $('#edit-my-information-general-error');
