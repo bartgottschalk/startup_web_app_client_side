@@ -352,11 +352,14 @@ $.build_select_box = function(id, name, css_class, selected_value, values) {
 };
 	
 $.are_arrays_equal = function(arr1,arr2) {
+    if (arr1.length !== arr2.length) {
+        return false;
+    }
     for (var i = 0; i < arr1.length; i++) {
-        if (arr1[i] != arr2[i]) { 
-            return false;   
-        }           
-    }       
+        if (arr1[i] != arr2[i]) {
+            return false;
+        }
+    }
     return true;
 };
 
