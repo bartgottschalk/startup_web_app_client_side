@@ -1,4 +1,3 @@
-var csrftoken;
 var env_vars = $.env_vars();
 
 var current_password_field = $('#change-my-password-current-password');

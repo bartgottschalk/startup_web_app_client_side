@@ -1,4 +1,3 @@
-var csrftoken;
 var env_vars = $.env_vars();
 
 var firstname_field = $('#edit-my-information-firstname');

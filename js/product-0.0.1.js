@@ -1,5 +1,4 @@
-// other global variables 
-var csrftoken;
+// other global variables
 var token_retried = false;
 var env_vars = $.env_vars();
 var product_identifier = null;

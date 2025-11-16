@@ -1,5 +1,4 @@
-// other global variables 
-var csrftoken;
+// other global variables
 var env_vars = $.env_vars();
 var token_retried = false;
 var stripe_checkout_handler = null;

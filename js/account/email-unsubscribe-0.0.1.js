@@ -1,4 +1,3 @@
-var csrftoken;
 var env_vars = $.env_vars();
 var general_error = $('#email-unsubscribe-general-error');
 var token_retried = false;
