@@ -219,7 +219,7 @@ process_stripe_payment_token = function() {
         success: process_stripe_payment_token_callback,
         beforeSend: function(request) {
 		    //console.log('in beforeSend');
-		    request.setRequestHeader('X-CSRFToken', csrftoken);
+		    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
 	    }
     })
         .fail(function(xhr, textStatus, errorThrown) {
@@ -388,7 +388,7 @@ verify_email_address_response = function() {
             success: verify_email_address_response_callback,
             beforeSend: function(request) {
 			    //console.log('in beforeSend');
-			    request.setRequestHeader('X-CSRFToken', csrftoken);
+			    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
 		    }
         })
             .fail(function(xhr, textStatus, errorThrown) {

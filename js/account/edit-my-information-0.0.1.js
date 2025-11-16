@@ -123,7 +123,7 @@ update_my_information = function() {
     		success: update_my_information_callback,
             beforeSend: function(request) {
 			    //console.log('in beforeSend');
-			    request.setRequestHeader('X-CSRFToken', csrftoken);
+			    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
 		    }
         })
             .fail(function(xhr, textStatus, errorThrown) {

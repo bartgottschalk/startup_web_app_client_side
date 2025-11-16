@@ -73,7 +73,7 @@ submit_pythonabot_coming_soon = function() {
     		success: pythonabot_notify_me_callback,
             beforeSend: function(request) {
 			    //console.log('in beforeSend');
-			    request.setRequestHeader('X-CSRFToken', csrftoken);
+			    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
 		    },
         })
             .fail(function(xhr, textStatus, errorThrown) {

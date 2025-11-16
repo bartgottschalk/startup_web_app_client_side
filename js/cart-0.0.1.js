@@ -279,7 +279,7 @@ update_sku_quantity = function(event) {
             success: cart_update_sku_quantity_callback,
             beforeSend: function(request) {
 			    //console.log('in beforeSend');
-			    request.setRequestHeader('X-CSRFToken', csrftoken);
+			    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
 		    }
         })
             .fail(function(xhr, textStatus, errorThrown) {
@@ -353,7 +353,7 @@ cart_remove_sku = function(event) {
         success: cart_remove_sku_callback,
         beforeSend: function(request) {
 		    //console.log('in beforeSend');
-		    request.setRequestHeader('X-CSRFToken', csrftoken);
+		    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
 	    }
     })
         .fail(function(xhr, textStatus, errorThrown) {
@@ -434,7 +434,7 @@ cart_apply_discount_code = function(event) {
             success: cart_apply_discount_code_callback,
             beforeSend: function(request) {
 			    //console.log('in beforeSend');
-			    request.setRequestHeader('X-CSRFToken', csrftoken);
+			    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
 		    }
         })
             .fail(function(xhr, textStatus, errorThrown) {
@@ -515,7 +515,7 @@ cart_remove_discount_code = function(event) {
         success: cart_remove_discount_code_callback,
         beforeSend: function(request) {
 		    //console.log('in beforeSend');
-		    request.setRequestHeader('X-CSRFToken', csrftoken);
+		    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
 	    }
     })
         .fail(function(xhr, textStatus, errorThrown) {
@@ -589,7 +589,7 @@ cart_update_shipping_method = function(event) {
         success: cart_update_shipping_method_callback,
         beforeSend: function(request) {
 		    //console.log('in beforeSend');
-		    request.setRequestHeader('X-CSRFToken', csrftoken);
+		    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
 	    }
     })
         .fail(function(xhr, textStatus, errorThrown) {
@@ -702,7 +702,7 @@ cart_delete_cart = function(event) {
         success: cart_delete_cart_callback,
         beforeSend: function(request) {
 		    //console.log('in beforeSend');
-		    request.setRequestHeader('X-CSRFToken', csrftoken);
+		    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
 	    }
     })
         .fail(function(xhr, textStatus, errorThrown) {
