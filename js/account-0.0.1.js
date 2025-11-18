@@ -111,7 +111,7 @@ load_account = function( data, textStatus, xhr ) {
         if (Object.keys(data['account_content']['orders_data']).length >= 1) {
             for (var order in data['account_content']['orders_data']) {	
                 var order_total_amount = data['account_content']['orders_data'][order]['order_total'];
-                var order_total_amount_formatted = '$' + order_total_amount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
+                var order_total_amount_formatted = '$' + parseFloat(order_total_amount).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
                 $('#my-account-body').append('<div id="account-orders-' + data['account_content']['orders_data'][order]['order_id'] + '" class="account-section-details"></div>');
                 $('#account-orders-' + data['account_content']['orders_data'][order]['order_id']).append('<div class="account-item"><span class="account-my-information-label">Order Total</span>: <span class="account-my-information-value">' + order_total_amount_formatted + '</span></div>');
                 var order_date = new Date(data['account_content']['orders_data'][order]['order_date_time']);

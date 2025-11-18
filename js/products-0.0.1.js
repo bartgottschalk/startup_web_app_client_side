@@ -31,8 +31,8 @@ load_products = function( data, textStatus, xhr ) {
         var price_low = data['products_data'][product_identifier]['price_low'];
         var price_high = data['products_data'][product_identifier]['price_high'];
 
-        var price_low_formatted = '$' + price_low.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
-        var price_high_formatted = '$' + price_high.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
+        var price_low_formatted = '$' + parseFloat(price_low).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+        var price_high_formatted = '$' + parseFloat(price_high).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
         if (price_low == price_high) {
             var price_range_str = price_low_formatted;
         }
