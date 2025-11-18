@@ -80,7 +80,7 @@ load_product = function( data, textStatus, xhr ) {
 
     first_sku_key = Object.keys(skus_raw_data)[0];
     var default_sku = skus_raw_data[first_sku_key];
-    var price_formatted = '$' + default_sku['price'].toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
+    var price_formatted = '$' + parseFloat(default_sku['price']).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
 
     document.title = title;
     $('#product-page-title').html(title);
@@ -133,7 +133,7 @@ load_product = function( data, textStatus, xhr ) {
                 var checked_str = ' checked="checked"';
             }
 
-            var price_formatted = '$' + skus_raw_data[sku_id]['price'].toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
+            var price_formatted = '$' + parseFloat(skus_raw_data[sku_id]['price']).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
             sku_description_str += ', ' + price_formatted + ' <span class="product-sku-selector-radio-group-description-note">[' + skus_raw_data[sku_id]['inventory_status_title'] + ']</span>';
             $('#product-sku-selector-radio-group').append('<div class="product-sku-selector-radio-group-item"><div class="product-sku-selector-radio-group-option"><input type="radio" name="sku_selection" value="' + sku_id + '"'+ checked_str + '/></div><div id="product-sku-selector-radio-group-description-' + sku_id + '" sku_id="' + sku_id + '" class="product-sku-selector-radio-group-description">' + sku_description_str + '</div></div>');
             $('input:radio[name=sku_selection][value="' + sku_id + '"]').change(sku_radio_item_clicked);
@@ -254,7 +254,7 @@ sku_radio_item_changed = function(selected_sku_id) {
     //console.log('selected_sku_id is ' + selected_sku_id);
     for (var sku_id in skus_raw_data) {
         if (selected_sku_id == sku_id) {
-            var price_formatted = '$' + skus_raw_data[sku_id]['price'].toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
+            var price_formatted = '$' + parseFloat(skus_raw_data[sku_id]['price']).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
             $('#product-sku-price').html(price_formatted + ' EACH');
             $('#product-sku-inventory-status').html(skus_raw_data[sku_id]['inventory_status_title']);
             $('#product-sku-inventory-status-help').html(skus_raw_data[sku_id]['inventory_status_description']);
