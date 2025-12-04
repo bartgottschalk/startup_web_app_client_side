@@ -1,0 +1,24 @@
+{
+  "name": "startup_web_app_client_side",
+  "version": "1.0.0",
+  "description": "I no longer control the domain startupwebapp.com and am not responsbile for the content that is currently served from that domain. Use caution if you go there.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bartgottschalk/startup_web_app_client_side.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/bartgottschalk/startup_web_app_client_side/issues"
+  },
+  "homepage": "https://github.com/bartgottschalk/startup_web_app_client_side#readme",
+  "devDependencies": {
+    "eslint": "^9.39.1"
+  }
+}
