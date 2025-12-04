@@ -233,6 +233,41 @@ jobs:
 
           echo "Content-Type headers set for extensionless files"
 
+      - name: Invalidate CloudFront cache
+        run: |
+          echo "Invalidating CloudFront cache..."
+
+          # Create invalidation for all files
+          INVALIDATION_ID=$(aws cloudfront create-invalidation \
+            --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} \
+            --paths "/*" \
+            --query 'Invalidation.Id' \
+            --output text)
+
+          echo "Invalidation created: $INVALIDATION_ID"
+
+          # Wait for invalidation to complete (max 5 minutes)
+          echo "Waiting for invalidation to complete..."
+          for i in {1..30}; do
+            STATUS=$(aws cloudfront get-invalidation \
+              --distribution-id ${{ env.CLOUDFRONT_DISTRIBUTION_ID }} \
+              --id $INVALIDATION_ID \
+              --query 'Invalidation.Status' \
+              --output text)
+
+            if [ "$STATUS" == "Completed" ]; then
+              echo "Invalidation completed!"
+              break
+            fi
+
+            echo "  Status: $STATUS (attempt $i/30)"
+            sleep 10
+          done
+
+          if [ "$STATUS" != "Completed" ]; then
+            echo "::warning::Invalidation still in progress after 5 minutes"
+          fi
+
       - name: Verify deployment
         run: |
           echo "Verifying deployment..."
