@@ -173,6 +173,66 @@ jobs:
 
           echo "Cache headers set"
 
+      - name: Set Content-Type for extensionless HTML files
+        run: |
+          echo "Setting Content-Type for extensionless HTML files..."
+
+          # List of extensionless HTML files (no .html extension)
+          # These need explicit Content-Type: text/html or browsers will download them
+          EXTENSIONLESS_FILES=(
+            "about"
+            "ad"
+            "cart"
+            "contact"
+            "create-account"
+            "forgot-username"
+            "login"
+            "privacy-policy"
+            "product"
+            "products"
+            "pythonabot"
+            "reset-password"
+            "set-new-password"
+            "terms-of-sale"
+            "terms-of-use"
+          )
+
+          for file in "${EXTENSIONLESS_FILES[@]}"; do
+            echo "  Setting Content-Type for: $file"
+            aws s3 cp "s3://${{ env.S3_BUCKET }}/$file" "s3://${{ env.S3_BUCKET }}/$file" \
+              --metadata-directive REPLACE \
+              --content-type "text/html" \
+              --cache-control "no-cache, no-store, must-revalidate" \
+              2>/dev/null || echo "    Warning: $file not found, skipping"
+          done
+
+          # Handle account/* and checkout/* subdirectories
+          echo "Setting Content-Type for account/* files..."
+          for file in $(aws s3 ls "s3://${{ env.S3_BUCKET }}/account/" --recursive | awk '{print $4}'); do
+            # Skip files with extensions
+            if [[ ! "$file" =~ \. ]]; then
+              echo "  Setting Content-Type for: $file"
+              aws s3 cp "s3://${{ env.S3_BUCKET }}/$file" "s3://${{ env.S3_BUCKET }}/$file" \
+                --metadata-directive REPLACE \
+                --content-type "text/html" \
+                --cache-control "no-cache, no-store, must-revalidate"
+            fi
+          done
+
+          echo "Setting Content-Type for checkout/* files..."
+          for file in $(aws s3 ls "s3://${{ env.S3_BUCKET }}/checkout/" --recursive | awk '{print $4}'); do
+            # Skip files with extensions
+            if [[ ! "$file" =~ \. ]]; then
+              echo "  Setting Content-Type for: $file"
+              aws s3 cp "s3://${{ env.S3_BUCKET }}/$file" "s3://${{ env.S3_BUCKET }}/$file" \
+                --metadata-directive REPLACE \
+                --content-type "text/html" \
+                --cache-control "no-cache, no-store, must-revalidate"
+            fi
+          done
+
+          echo "Content-Type headers set for extensionless files"
+
       - name: Verify deployment
         run: |
           echo "Verifying deployment..."
