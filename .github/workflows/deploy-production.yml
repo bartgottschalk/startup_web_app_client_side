@@ -119,16 +119,41 @@ jobs:
           echo "Deploying frontend to S3..."
           echo "Bucket: ${{ env.S3_BUCKET }}"
 
+          # Use include pattern to only deploy frontend assets
+          # Exclude everything first, then include only what we need
           aws s3 sync . s3://${{ env.S3_BUCKET }} \
             --delete \
-            --exclude ".git/*" \
-            --exclude ".github/*" \
-            --exclude "node_modules/*" \
-            --exclude ".DS_Store" \
-            --exclude "*.md" \
-            --exclude "package*.json" \
-            --exclude "eslint.config.js" \
-            --exclude ".gitignore"
+            --exclude "*" \
+            --include "index.html" \
+            --include "error.html" \
+            --include "menu.html" \
+            --include "header.html" \
+            --include "header-prefix.html" \
+            --include "footer.html" \
+            --include "robots.txt" \
+            --include "sitemap.xml" \
+            --include "js/*" \
+            --include "js/**/*" \
+            --include "css/*" \
+            --include "img/*" \
+            --include "img/**/*" \
+            --include "about" \
+            --include "ad" \
+            --include "cart" \
+            --include "contact" \
+            --include "create-account" \
+            --include "forgot-username" \
+            --include "login" \
+            --include "privacy-policy" \
+            --include "product" \
+            --include "products" \
+            --include "pythonabot" \
+            --include "reset-password" \
+            --include "set-new-password" \
+            --include "terms-of-sale" \
+            --include "terms-of-use" \
+            --include "account/*" \
+            --include "checkout/*"
 
           echo "Sync complete"
 
