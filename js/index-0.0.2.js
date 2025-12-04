@@ -39,6 +39,9 @@ $.env_vars = function () {
 	    case 'www.startupwebapp.com':
 	    	api_url = 'https://api.startupwebapp.com';
 	        break;
+	    case 'startupwebapp.mosaicmeshai.com':
+	    	api_url = 'https://startupwebapp-api.mosaicmeshai.com';
+	        break;
 	    default:
 	        break;
     }

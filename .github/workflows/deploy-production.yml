@@ -1,0 +1,204 @@
+# ============================================================================
+# GitHub Actions Workflow: Deploy Frontend to Production
+# ============================================================================
+#
+# PURPOSE:
+# This workflow deploys the StartupWebApp frontend to S3 + CloudFront.
+#
+# TRIGGERS:
+# 1. repository_dispatch: Triggered by backend deploy-production.yml
+# 2. workflow_dispatch: Manual trigger for frontend-only deployments
+#
+# WORKFLOW OVERVIEW:
+# 1. Run ESLint to validate code quality
+# 2. Run QUnit tests (optional - currently placeholder)
+# 3. Sync files to S3 bucket
+# 4. CloudFront cache uses versioned filenames (no invalidation needed)
+#
+# REQUIRED GITHUB SECRETS:
+# - AWS_ACCESS_KEY_ID: IAM user access key with S3 permissions
+# - AWS_SECRET_ACCESS_KEY: IAM user secret access key
+#
+# CACHE STRATEGY:
+# - HTML files: no-cache (always fetch latest)
+# - JS/CSS files: Versioned filenames (e.g., index-0.0.2.js) = cached forever
+# - No CloudFront invalidation needed due to versioned assets
+#
+# ============================================================================
+
+name: Deploy Frontend to Production
+
+# ============================================================================
+# TRIGGER CONFIGURATION
+# ============================================================================
+on:
+  # Triggered by backend deployment workflow
+  repository_dispatch:
+    types: [deploy-production]
+
+  # Manual trigger for frontend-only deployments
+  workflow_dispatch:
+    inputs:
+      skip_tests:
+        description: 'Skip ESLint and tests'
+        required: false
+        type: boolean
+        default: false
+
+# ============================================================================
+# ENVIRONMENT VARIABLES
+# ============================================================================
+env:
+  AWS_REGION: us-east-1
+  S3_BUCKET: startupwebapp-frontend-production
+  CLOUDFRONT_DISTRIBUTION_ID: E1HZ3V09L2NDK1
+
+# ============================================================================
+# JOBS
+# ============================================================================
+
+jobs:
+  # ==========================================================================
+  # JOB 1: Lint and Test
+  # ==========================================================================
+  lint:
+    name: Lint and Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    # Skip if manual trigger with skip_tests=true
+    if: ${{ github.event.inputs.skip_tests != 'true' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+
+      # QUnit tests would go here if configured
+      # - name: Run QUnit tests
+      #   run: npm test
+
+  # ==========================================================================
+  # JOB 2: Deploy to S3
+  # ==========================================================================
+  deploy:
+    name: Deploy to S3
+    runs-on: ubuntu-latest
+    needs: lint
+    timeout-minutes: 10
+
+    # Run if lint succeeded, or if lint was skipped (manual trigger with skip_tests)
+    if: |
+      always() &&
+      (needs.lint.result == 'success' || needs.lint.result == 'skipped')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Sync to S3
+        run: |
+          echo "Deploying frontend to S3..."
+          echo "Bucket: ${{ env.S3_BUCKET }}"
+
+          aws s3 sync . s3://${{ env.S3_BUCKET }} \
+            --delete \
+            --exclude ".git/*" \
+            --exclude ".github/*" \
+            --exclude "node_modules/*" \
+            --exclude ".DS_Store" \
+            --exclude "*.md" \
+            --exclude "package*.json" \
+            --exclude "eslint.config.js" \
+            --exclude ".gitignore"
+
+          echo "Sync complete"
+
+      - name: Set cache headers for HTML files
+        run: |
+          echo "Setting cache headers for HTML files..."
+
+          # Find all HTML files and set no-cache headers
+          aws s3 cp s3://${{ env.S3_BUCKET }}/ s3://${{ env.S3_BUCKET }}/ \
+            --recursive \
+            --exclude "*" \
+            --include "*.html" \
+            --include "*/index.html" \
+            --metadata-directive REPLACE \
+            --cache-control "no-cache, no-store, must-revalidate" \
+            --content-type "text/html"
+
+          echo "Cache headers set"
+
+      - name: Verify deployment
+        run: |
+          echo "Verifying deployment..."
+
+          # Check that index.html exists
+          aws s3 ls s3://${{ env.S3_BUCKET }}/index.html
+
+          # Count files deployed
+          FILE_COUNT=$(aws s3 ls s3://${{ env.S3_BUCKET }} --recursive | wc -l)
+          echo "Files deployed: $FILE_COUNT"
+
+          echo ""
+          echo "Deployment complete!"
+          echo "Frontend URL: https://startupwebapp.mosaicmeshai.com"
+          echo "CloudFront URL: https://d34ongxkfo84gr.cloudfront.net"
+
+  # ==========================================================================
+  # JOB 3: Summary
+  # ==========================================================================
+  summary:
+    name: Deployment Summary
+    runs-on: ubuntu-latest
+    needs: [lint, deploy]
+    if: always()
+
+    steps:
+      - name: Display summary
+        run: |
+          echo "=========================================="
+          echo "Frontend Deployment Summary"
+          echo "=========================================="
+          echo "Commit: ${{ github.sha }}"
+          echo "Triggered by: ${{ github.event_name }}"
+
+          if [ "${{ github.event_name }}" == "repository_dispatch" ]; then
+            echo "Backend commit: ${{ github.event.client_payload.commit }}"
+          fi
+
+          echo ""
+          echo "Job Results:"
+          echo "  Lint:   ${{ needs.lint.result }}"
+          echo "  Deploy: ${{ needs.deploy.result }}"
+          echo "=========================================="
+
+          if [ "${{ needs.deploy.result }}" == "success" ]; then
+            echo ""
+            echo "DEPLOYMENT SUCCESSFUL"
+            echo ""
+            echo "Frontend URL: https://startupwebapp.mosaicmeshai.com"
+          else
+            echo ""
+            echo "::error::DEPLOYMENT FAILED - Check job logs above"
+            exit 1
+          fi
