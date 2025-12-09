@@ -51,7 +51,7 @@ on:
 env:
   AWS_REGION: us-east-1
   S3_BUCKET: startupwebapp-frontend-production
-  CLOUDFRONT_DISTRIBUTION_ID: E1HZ3V09L2NDK1
+  CLOUDFRONT_DISTRIBUTION_ID: E2IQ9KG6S4Y7R3
 
 # ============================================================================
 # JOBS
