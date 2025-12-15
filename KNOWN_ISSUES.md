@@ -148,13 +148,17 @@ docker-compose exec -e HEADLESS=TRUE backend python manage.py test functional_te
    - Increase test coverage to 100% assertions passing
 
 4. **Expand Test Coverage**
-   - **Current**: Only 3 of 19 JavaScript files have QUnit tests (~16% coverage)
-   - **Files with tests**: index-0.0.2.js, utilities/utilities-0.0.1.js, utilities/form-utilities-0.0.1.js
+   - **Current**: 4 of 19 JavaScript files have QUnit tests (~21% coverage)
+   - **Files with tests**:
+     - index-0.0.2.js (environment detection, utilities)
+     - utilities/utilities-0.0.1.js (form validation)
+     - utilities/form-utilities-0.0.1.js (form helpers)
+     - ✅ **checkout/confirm-0.0.1.js** (13 tests - added December 2025)
    - **Priority files needing tests**:
      - product-0.0.1.js (product display and SKU selection logic)
      - cart-0.0.1.js (shopping cart operations)
-     - checkout/confirm-0.0.1.js (order confirmation and totals)
-     - js/utilities/form-utilities-0.0.1.js (form validation - expand existing tests)
+     - checkout/success-0.0.1.js (payment success handler - added December 2025)
+     - account/order-0.0.1.js (order detail display)
    - **Recommendation**: Add tests incrementally as bugs are fixed or features added
 
 ### Low Priority

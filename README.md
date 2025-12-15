@@ -183,16 +183,20 @@ npx eslint js/**/*.js
 
 Frontend unit tests use QUnit 2.9.2.
 
-**Run tests in browser:** http://localhost:8080/unittests/index_tests.html
+**Run tests in browser:**
+- http://localhost:8080/unittests/index_tests.html (utility tests)
+- http://localhost:8080/unittests/checkout_confirm_tests.html (checkout tests - added December 2025)
 
 **Test Coverage Status:**
-- **Tested:** 3 files (index-0.0.2.js, utilities/utilities-0.0.1.js, utilities/form-utilities-0.0.1.js)
-- **Total:** 19 JavaScript files
-- **Coverage:** ~16% of JavaScript files
+- **Tested:** 4 files (index-0.0.2.js, utilities/*.js, checkout/confirm-0.0.1.js)
+- **Total:** 20 JavaScript files (includes new checkout/success-0.0.1.js)
+- **Coverage:** ~20% of JavaScript files
+- **Tests:** 13 checkout tests + existing utility tests
 - **Future work:** Expand test coverage to remaining files, particularly:
   - product-0.0.1.js (product display and SKU selection)
   - cart-0.0.1.js (shopping cart functionality)
-  - checkout/confirm-0.0.1.js (order confirmation)
+  - checkout/success-0.0.1.js (payment success handler)
+  - account/order-0.0.1.js (order detail display)
 
 ## Running tests
 
