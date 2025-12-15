@@ -1,9 +1,6 @@
 // other global variables
 var env_vars = $.env_vars();
 var token_retried = false;
-var stripe_checkout_handler = null;
-var stripe_payment_token = null;
-var stripe_payment_args = null;
 var number_of_items_in_order = 0;
 var confirm_total_raw = null;
 var confirm_total_formatted = null;
@@ -110,7 +107,6 @@ load_confirm_items = function( data, textStatus, xhr ) {
     //console.log(data);
 
     if ($.user_logged_in) {
-        $('#enter-payment-information-button-wrapper').removeClass('hide');
         $('#confirm-order-agree-terms-of-sale').removeClass('hide');
         $('#confirm-checkout-button-wrapper-bottom').removeClass('hide');
     }
@@ -128,7 +124,7 @@ load_confirm_items = function( data, textStatus, xhr ) {
             var parent_product__title = data['item_data']['product_sku_data'][product_sku]['parent_product__title'];
             var parent_product__title_url = data['item_data']['product_sku_data'][product_sku]['parent_product__title_url'];
             var parent_product__identifier = data['item_data']['product_sku_data'][product_sku]['parent_product__identifier'];
-            var price = data['item_data']['product_sku_data'][product_sku]['price'];
+            var price = parseFloat(data['item_data']['product_sku_data'][product_sku]['price']);
             var quantity = data['item_data']['product_sku_data'][product_sku]['quantity'];
             var size = data['item_data']['product_sku_data'][product_sku]['size'];
             var sku_id = data['item_data']['product_sku_data'][product_sku]['sku_id'];
@@ -137,7 +133,7 @@ load_confirm_items = function( data, textStatus, xhr ) {
             var sku_inventory__identifier = data['item_data']['product_sku_data'][product_sku]['sku_inventory__identifier'];
 
             var item_image_str = '<img alt="' + parent_product__title + '" class="cart-detail-item-image" src="' + sku_image_url + '"></img>';
-            var item_price_each_formatted = '$' + price.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
+            var item_price_each_formatted = '$' + price.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
             var item_subtotal = price * quantity;
             var item_subtotal_formatted = '$' + item_subtotal.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
             var item_image_str = '<a href="/product?name=' + parent_product__title_url + '&id=' + parent_product__identifier + '&referrer=/cart"><img alt="' + parent_product__title + '" class="cart-details-item-image" src="' + sku_image_url + '"></img></a>';
@@ -215,8 +211,8 @@ load_confirm_shipping_methods  = function( data, textStatus, xhr ) {
 
     if (data['cart_found'] == true) {
         var carrier = data['confirm_shipping_method']['carrier'];
-        var shipping_cost = data['confirm_shipping_method']['shipping_cost'];
-        var shipping_cost_formatted = '$' + shipping_cost.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
+        var shipping_cost = parseFloat(data['confirm_shipping_method']['shipping_cost']);
+        var shipping_cost_formatted = '$' + shipping_cost.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
         var shipping_method_str = '<div class="confirm-detail-line">' + carrier + '&nbsp;' + shipping_cost_formatted + '</div>';
         $('#shipping-methods').append(shipping_method_str);
     }
@@ -266,27 +262,27 @@ load_confirm_totals = function( data, textStatus, xhr ) {
     if (data['cart_found'] == true) {
         $('#confirm-total-table').find('tr').remove();
 
-        var item_subtotal_formatted = '$' + data['confirm_totals_data']['item_subtotal'].toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
+        var item_subtotal_formatted = '$' + parseFloat(data['confirm_totals_data']['item_subtotal']).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
         $('#confirm-total-table').append('<tr><td class="cart-totals-item-table-title">Item Subtotal</td><td id="item_total" class="cart-totals-item-table-price">' + item_subtotal_formatted + '</td></tr>');
 
         if (data['confirm_totals_data']['item_discount'] != null && data['confirm_totals_data']['item_discount'] != 0) {
-            var item_discount_formatted = '$' + data['confirm_totals_data']['item_discount'].toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
+            var item_discount_formatted = '$' + parseFloat(data['confirm_totals_data']['item_discount']).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
             $('#confirm-total-table').append('<tr><td class="cart-totals-item-table-title">Item Discount</td><td id="item_discount_total" class="cart-totals-item-table-price">(' + item_discount_formatted + ')</td></tr>');
         }
 
-        var shipping_subtotal_formatted = '$' + data['confirm_totals_data']['shipping_subtotal'].toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
+        var shipping_subtotal_formatted = '$' + parseFloat(data['confirm_totals_data']['shipping_subtotal']).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
         $('#confirm-total-table').append('<tr><td class="cart-totals-item-table-title">Shipping</td><td id="shipping_method_total" class="cart-totals-item-table-price">' + shipping_subtotal_formatted + '</td></tr>');
 
         if (data['confirm_totals_data']['shipping_discount'] != null && data['confirm_totals_data']['shipping_discount'] != 0) {
-            var shipping_discount_formatted = '$' + data['confirm_totals_data']['shipping_discount'].toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
+            var shipping_discount_formatted = '$' + parseFloat(data['confirm_totals_data']['shipping_discount']).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
             $('#confirm-total-table').append('<tr><td class="cart-totals-item-table-title">Shipping Discount</td><td id="shipping_method_discount_total" class="cart-totals-item-table-price">(' + shipping_discount_formatted + ')</td></tr>');
         }
 
         //console.log(confirm_total_raw)
-        confirm_total_raw = data['confirm_totals_data']['cart_total'];
+        confirm_total_raw = parseFloat(data['confirm_totals_data']['cart_total']);
         //console.log(confirm_total_raw)
         //console.log(confirm_total_formatted)
-        confirm_total_formatted = '$' + data['confirm_totals_data']['cart_total'].toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
+        confirm_total_formatted = '$' + parseFloat(data['confirm_totals_data']['cart_total']).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
         //console.log(confirm_total_formatted)
         $('#confirm-total-table').append('<tr><td class="cart-totals-item-table-title"><b>Cart Total</b></td><td id="confirm_total" class="cart-totals-item-table-price"><b>' + confirm_total_formatted + '</b></td></tr>');
 
@@ -315,87 +311,19 @@ load_confirm_payment_data = function( data, textStatus, xhr ) {
     //console.log(data);
     //console.log('number_of_items_in_order is ' + number_of_items_in_order);
 
-
-    if (data['customer_data'] != null && Object.keys(data['customer_data']).length !== 0) {
-        stripe_payment_token = data['customer_data']['token'];
-        stripe_payment_args = data['customer_data']['args'];
-        display_payment_data();
-        $('#enter-payment-information-button-span').html('CHANGE PAYMENT & SHIPPING INFO');
-
+    if ($.user_logged_in) {
         $('#login-create-account-continue-anon-subheader').remove();
         $('#login-create-account-continue-anon-wrapper').remove();
         $('#confirm-anonymous-email-address-wrapper').remove();
 
-        $('#enter-payment-information-button-wrapper').removeClass('hide');
         $('#confirm-order-agree-terms-of-sale').removeClass('hide');
         $('#confirm-checkout-button-wrapper-bottom').removeClass('hide');
 
-        $('#confirmation-email-sub-header').removeClass('hide');
-        $('#confirmation-email-detail-wrapper').removeClass('hide');
-        $('#confirmation-email-detail-wrapper').html('');
-        var change_email_address_span;
-        if (!$.user_logged_in) {
-            change_email_address_span = ' <span id="change-confirmation-email-address" class="confirm-change-confirmation-email-address">[Change Email Address]</span>';
-        }
-        else {
-            change_email_address_span = '';
-        }
-        $('#confirmation-email-detail-wrapper').append('<div class="account-item"><div class="confirm-detail-line">An order confirmation/receipt will be sent to: ' + stripe_payment_token.email + '.' + change_email_address_span + '</div></div>');
-        $('#change-confirmation-email-address').click(function (event)
-        {
-            //console.log('change-confirmation-email-address clicked');
-            change_confirmation_email_address();
-        });
-    }
-    if (data['email'] != null) {
-        set_up_stripe_checkout_handler(data['email'], data['stripe_publishable_key']);
-    }
-    if (stripe_payment_token != null && stripe_payment_token.email != null) {
-        set_up_stripe_checkout_handler(stripe_payment_token.email, data['stripe_publishable_key']);
+        check_if_checkout_ready();
     }
 };
-set_up_stripe_checkout_handler = function (email, stripe_publishable_key) {
-    //console.log(confirm_total_raw)
-    //console.log(confirm_total_formatted)
-
-    if (number_of_items_in_order >= 2) {
-        var description_str = number_of_items_in_order + ' Items: ' + confirm_total_formatted;
-    }
-    else {
-        var description_str = number_of_items_in_order + ' Item: ' + confirm_total_formatted;
-    }
-    stripe_checkout_handler = StripeCheckout.configure({
-        key: stripe_publishable_key,
-        name: 'StartupWebApp.com',
-        panelLabel: 'Verify',
-        description: description_str,
-        zipCode: true,
-        email: email,
-        locale: 'auto',
-        billingAddress: true,
-        shippingAddress: true,
-        amount: confirm_total_raw * 100,
-        token: stripe_checkout_handler_token_callback
-    });	 	
-};
-stripe_checkout_handler_token_callback = function(token, args) {
-    //console.log(token);
-    //console.log(token.card);
-    //console.log('args are...');
-    //console.log(args);
-    // You can access the token ID with `token.id`.
-    // Get the token ID to your server-side code for use.
-    stripe_checkout_handler.close();
-
-    confirm_order_payment_shipping_error.attr('class', 'confirm-order-form-error-text-hidden');
-    confirm_order_payment_shipping_error.empty();
-
-    stripe_payment_token = token;
-    stripe_payment_args = args;
-    $('#enter-payment-information-button-span').html('CHANGE PAYMENT & SHIPPING INFO');
-    display_payment_data();
-    process_stripe_payment_token();
-};
+/* eslint-disable no-undef */
+// Legacy code - will be removed in future update
 
 change_confirmation_email_address = function () {
     //console.log('in change_confirmation_email_address');
@@ -541,12 +469,6 @@ process_stripe_payment_token_callback = function( data, textStatus, xhr ) {
 set_up_confirm_form_listeners = function() {
     //console.log('set_up_confirm_form_listeners called');
 
-    $('#enter-payment-information-button').click(function(e){
-        //console.log('enter-payment-information-button clicked');
-        stripe_checkout_handler.open({
-        });
-  	});
-	
     $('#confirm-order-terms-of-sale-agree').change(function(e){
         //console.log('confirm-order-terms-of-sale-agree changed');
         confirm_order_terms_of_sale_agree_changed();
@@ -629,24 +551,15 @@ look_up_anonymous_email_address = function() {
 };
 
 look_up_anonymous_email_address_callback = function( data, textStatus, xhr ) {
-	
+
     //console.log(data);
     if (data['anonymous_email_address_payment_lookup'] == 'success') {
         //console.log('anonymous_email_address_payment_lookup success');
-
-        if (data['customer_data'] != null) {
-            stripe_payment_token = data['customer_data']['token'];
-            stripe_payment_args = data['customer_data']['args'];
-            display_payment_data();
-            $('#enter-payment-information-button-span').html('CHANGE PAYMENT & SHIPPING INFO');
-        }
-        set_up_stripe_checkout_handler(anonymous_email_address_field.val(), data['stripe_publishable_key']);
 
         $('#login-create-account-continue-anon-subheader').remove();
         $('#login-create-account-continue-anon-wrapper').remove();
         $('#confirm-anonymous-email-address-wrapper').remove();
 
-        $('#enter-payment-information-button-wrapper').removeClass('hide');
         $('#confirm-order-agree-terms-of-sale').removeClass('hide');
         $('#confirm-checkout-button-wrapper-bottom').removeClass('hide');
 
@@ -666,6 +579,8 @@ look_up_anonymous_email_address_callback = function( data, textStatus, xhr ) {
             //console.log('change-confirmation-email-address clicked');
             change_confirmation_email_address();
         });
+
+        check_if_checkout_ready();
     }
     else {
         //console.log('look_up_anonymous_email_address_callback error');
@@ -712,22 +627,16 @@ confirm_order_terms_of_sale_agree_changed = function(){
 
 check_if_checkout_ready = function () {
     if (confirm_order_terms_of_sale_agree_field.is(':checked')) {
-        if (stripe_payment_token != null) {
-            $('#place-order-button-bottom').click(function(e){
-                //console.log('place-order-button-bottom clicked');
-                confirm_place_order(e);
-            });
-            $('#place-order-button-span').removeClass('confirm-order-button-disabled-span');
-        }
-        else {
-            $('#place-order-button-bottom').unbind('click');
-            $('#place-order-button-span').addClass('confirm-order-button-disabled-span');			
-        }
+        $('#place-order-button-bottom').click(function(e){
+            //console.log('place-order-button-bottom clicked');
+            create_stripe_checkout_session();
+        });
+        $('#place-order-button-span').removeClass('confirm-order-button-disabled-span');
     }
     else {
         $('#place-order-button-bottom').unbind('click');
         $('#place-order-button-span').addClass('confirm-order-button-disabled-span');
-    }	
+    }
 };
 
 confirm_place_order = function(event) {
@@ -916,6 +825,132 @@ cart_check_for_valid_checkout_conditions = function () {
     else {
         $('#confirm-checkout-button-wrapper-bottom').removeClass('hide');
         $('#confirm-detial-general-notification').html('');
+    }
+};
+
+/* eslint-enable no-undef */
+
+// Stripe Checkout Sessions Functions
+
+var create_stripe_checkout_session = function() {
+    //console.log('create_stripe_checkout_session called');
+
+    confirm_order_terms_of_sale_agree_field.attr('class', 'confirm-order-agree-terms-of-sale-checkbox');
+    confirm_order_terms_of_sale_agree_error.attr('class', 'confirm-order-form-error-text-hidden');
+    confirm_order_terms_of_sale_agree_error.empty();
+
+    var confirm_order_terms_of_sale_agree_val = 'false';
+    if (confirm_order_terms_of_sale_agree_field.is(':checked')) {
+        confirm_order_terms_of_sale_agree_val = 'true';
+    }
+
+    var confirm_order_terms_of_sale_agree_valid = $.isTermsOfUseAgreeValid(confirm_order_terms_of_sale_agree_val);
+    $.display_errors(confirm_order_terms_of_sale_agree_valid, confirm_order_terms_of_sale_agree_error, confirm_order_terms_of_sale_agree_field, 'terms_of_sale_agree_', true, null, 'confirm-order-form-error-text');
+
+    var newsletter_val = null;
+    var save_defaults_val = null;
+    if (!$.user_logged_in) {
+        newsletter_val = 'false';
+        if ($('#confirm-order-sign-up-for-marketing-emails').is(':checked')) {
+            newsletter_val = 'true';
+        }
+    }
+    else {
+        save_defaults_val = 'false';
+        if ($('#save-shipping-and-payment-info').is(':checked')) {
+            save_defaults_val = 'true';
+        }
+    }
+
+    if (confirm_order_terms_of_sale_agree_valid.length == 0) {
+        $('#place-order-button-bottom').remove();
+        $('#confirm-checkout-button-wrapper-bottom').append('<div class="create-account-loader-wrapper"><div class="create-account-loader"></div></div>');
+
+        var json_data = {
+            'agree_to_terms_of_sale': confirm_order_terms_of_sale_agree_field.is(':checked'),
+            'newsletter': newsletter_val,
+            'save_defaults': save_defaults_val
+        };
+
+        //console.log('json_data is', json_data);
+
+        $.ajax({
+            method: 'POST',
+            url: env_vars['api_url'] + '/order/create-checkout-session',
+            dataType: 'json',
+            xhrFields: {
+                withCredentials: true
+            },
+            data: json_data,
+            success: handle_checkout_session_success,
+            beforeSend: function(request) {
+                //console.log('in beforeSend');
+                request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
+            }
+        })
+            .fail(function(xhr, textStatus, errorThrown) {
+            //console.log('post create-checkout-session failed');
+            //console.log('xhr.status is ' + xhr.status);
+                $.log_client_event('ajaxerror', 'order-create-checkout-session');
+                switch (xhr.status) {
+                case 403:
+                    // handle unauthorized
+                    if (token_retried == false) {
+                        //console.log('retrying token');
+                        token_retried = true;
+                        $.get_token(create_stripe_checkout_session);
+                    }
+                    else {
+                        $.display_page_fatal_error('confirm-detail-body');
+                        break;
+                    }
+                    break;
+                default:
+                    $.display_page_fatal_error('confirm-detail-body');
+                    break;
+                }
+            });
+    }
+};
+
+var handle_checkout_session_success = function(data, textStatus, xhr) {
+    //console.log(data);
+    //console.log('handle_checkout_session_success called');
+
+    if (data['create_checkout_session'] == 'success') {
+        //console.log('create_checkout_session successful');
+        //console.log('checkout_url is ' + data['checkout_url']);
+
+        // Redirect to Stripe Checkout
+        window.location.href = data['checkout_url'];
+    }
+    else {
+        //console.log('handle_checkout_session_success error');
+        $('.create-account-loader-wrapper').remove();
+        $('#confirm-checkout-button-wrapper-bottom').append('<div id="place-order-button-bottom" class="confirm-order-button"><span id="place-order-button-span" class="confirm-order-button-span confirm-order-button-disabled-span">CONTINUE TO PAYMENT</span></div>');
+        check_if_checkout_ready();
+
+        var errors = [];
+        if (data['errors']['error'] == 'cart-not-found') {
+            errors.push({'type': 'cart-not-found','description': 'No cart was found.'});
+            $.display_errors(errors, $('#confirm-order-terms-of-sale-agree-error'), $('#confirm-order-terms-of-sale-agree'), 'place-order-error-', true, null, 'confirm-order-form-error-text');
+            $.log_client_event('ajaxerror', 'create-checkout-session-cart-not-found');
+        }
+        else if (data['errors']['error'] == 'agree-to-terms-of-sale-must-be-checked') {
+            errors.push({'type': 'confirm-agree-to-terms-of-sale--must-be-checked','description': 'You must agree to the StartupWebApp.com <a href="/terms-of-sale" target="_blank">Terms of Sale</a>.'});
+            $.display_errors(errors, $('#confirm-order-terms-of-sale-agree-error'), $('#confirm-order-terms-of-sale-agree'), 'place-order-error-', true, null, 'confirm-order-form-error-text');
+            $.log_client_event('ajaxerror', 'create-checkout-session-agree-to-terms-of-sale-must-be-checked');
+        }
+        else if (data['errors']['error'] == 'agree-to-terms-of-sale-required') {
+            errors.push({'type': 'confirm-agree-to-terms-of-sale-required','description': 'You must agree to the StartupWebApp.com <a href="/terms-of-sale" target="_blank">Terms of Sale</a>.'});
+            $.display_errors(errors, $('#confirm-order-terms-of-sale-agree-error'), $('#confirm-order-terms-of-sale-agree'), 'place-order-error-', true, null, 'confirm-order-form-error-text');
+            $.log_client_event('ajaxerror', 'create-checkout-session-agree-to-terms-of-sale-required');
+        }
+        else {
+            errors.push({'type': 'confirm-undefined','description': 'There was an undefined error processing your request.'});
+            $.display_errors(errors, $('#confirm-order-terms-of-sale-agree-error'), $('#confirm-order-terms-of-sale-agree'), 'place-order-error-', true, null, 'confirm-order-form-error-text');
+            $.log_client_event('ajaxerror', 'create-checkout-session-undefined');
+        }
     }
 };
 

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Checkout Confirm Javascript Tests</title>
+	<link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.9.2.css">
+</head>
+<body>
+	<div id="qunit"></div>
+	<div id="qunit-fixture"></div>
+
+    <script src="../js/jquery/3.7.1/jquery.min.js"></script>
+	<script src="../js/index-0.0.2.js"></script>
+	<script src="../js/utilities/utilities-0.0.1.js"></script>
+	<script src="../js/utilities/form-utilities-0.0.1.js"></script>
+	<script>
+		// Mock $.ajax BEFORE loading confirm-0.0.1.js to prevent auto-running AJAX calls
+		var originalAjax = $.ajax;
+		$.ajax = function(options) {
+			// Silently ignore AJAX calls during initial page load
+			return {
+				fail: function() { return this; }
+			};
+		};
+	</script>
+	<script src="../js/checkout/confirm-0.0.1.js"></script>
+	<script>
+		// Restore original $.ajax after confirm-0.0.1.js loads
+		$.ajax = originalAjax;
+	</script>
+	<script src="./js/qunit/qunit-2.9.2.js"></script>
+	<script src="./js/checkout_confirm_tests.js"></script>
+</body>
+</html>

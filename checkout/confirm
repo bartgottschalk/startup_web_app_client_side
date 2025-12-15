@@ -115,7 +115,7 @@
                 <div id="confirm-order-terms-of-sale-agree-error" class="confirm-order-form-error-text-hidden"></div>
                 <div id="confirm-checkout-button-wrapper-bottom" class="confirm-order-button-wrapper hide">
                     <div id="place-order-button-bottom" class="confirm-order-button">
-                        <span id="place-order-button-span" class="confirm-order-button-span confirm-order-button-disabled-span">PLACE ORDER</span>
+                        <span id="place-order-button-span" class="confirm-order-button-span confirm-order-button-disabled-span">CONTINUE TO PAYMENT</span>
                     </div>
                 </div>
             </section-full-no-top-margin>
@@ -126,6 +126,6 @@
         <script src="/js/utilities/form-utilities-0.0.1.js"></script>
         <script src="/js/utilities/utilities-0.0.1.js"></script>
         <script src="/js/checkout/confirm-0.0.1.js"></script>
-        <script src="https://checkout.stripe.com/checkout.js"></script>
+        <script src="https://js.stripe.com/v3/"></script>
 	</body>
 </html>
