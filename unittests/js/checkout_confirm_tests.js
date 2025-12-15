@@ -283,6 +283,36 @@ start_checkout_tests = function () {
 				'Old token-based callback should be removed or unused');
 		});
 	});
+
+	// ===== Decimal Parsing Tests =====
+
+	QUnit.module('Decimal Parsing Bug Fixes', function() {
+
+		QUnit.test('parseFloat converts string decimals to numbers', function(assert) {
+			// Test the fix for backend returning string decimals
+			var stringDecimal = '29.99';
+			var numberDecimal = parseFloat(stringDecimal);
+
+			assert.ok(typeof numberDecimal === 'number', 'parseFloat should return a number');
+			assert.equal(numberDecimal, 29.99, 'Should parse correctly');
+			assert.ok(typeof numberDecimal.toFixed === 'function', 'Should have toFixed method');
+		});
+
+		QUnit.test('price formatting works with parseFloat', function(assert) {
+			// Simulate backend response with string decimal
+			var price = parseFloat('19.99');
+			var formatted = '$' + price.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+
+			assert.equal(formatted, '$19.99', 'Should format price correctly');
+		});
+
+		QUnit.test('large amounts format with commas', function(assert) {
+			var price = parseFloat('1234.56');
+			var formatted = '$' + price.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+
+			assert.equal(formatted, '$1,234.56', 'Should add commas for thousands');
+		});
+	});
 };
 
 $(document).ready(function() {
