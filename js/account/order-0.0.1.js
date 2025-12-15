@@ -178,11 +178,22 @@ load_order = function( data, textStatus, xhr ) {
             $('#billing-address-details').append('<div class="confirm-detail-line">' + data['order_data']['order_billing_address']['country'] + '</div>');
         }
 
-        if (Object.keys(data['order_data']['order_payment_info']).length === 0) {		
+        if (Object.keys(data['order_data']['order_payment_info']).length === 0) {
             $('#payment-information-detail-wrapper').append('<div class="account-item">This order has no payment information</div>');
         }
         else {
-            $('#payment-information-detail-wrapper').append('<div class="account-item"><div class="confirm-detail-line">' + data['order_data']['order_payment_info']['card_brand'] + ': **** **** **** ' + data['order_data']['order_payment_info']['card_last4'] + ', Exp: ' + data['order_data']['order_payment_info']['card_exp_month'] + '/' + data['order_data']['order_payment_info']['card_exp_year'] + '</div></div>');
+            // Check if card details are available (old flow) or null (new Stripe Checkout Sessions)
+            var payment_info = data['order_data']['order_payment_info'];
+            if (payment_info['card_brand'] && payment_info['card_last4']) {
+                // Old flow: Full card details available
+                $('#payment-information-detail-wrapper').append('<div class="account-item"><div class="confirm-detail-line">' + payment_info['card_brand'] + ': **** **** **** ' + payment_info['card_last4'] + ', Exp: ' + payment_info['card_exp_month'] + '/' + payment_info['card_exp_year'] + '</div></div>');
+            }
+            else {
+                // New Checkout Sessions flow: Card details not available
+                var payment_method_display = payment_info['payment_type'] || 'Card';
+                payment_method_display = payment_method_display.charAt(0).toUpperCase() + payment_method_display.slice(1);
+                $('#payment-information-detail-wrapper').append('<div class="account-item"><div class="confirm-detail-line">Payment Method: ' + payment_method_display + ' (processed by Stripe)</div></div>');
+            }
         }
 
         if (Object.keys(data['order_data']['order_payment_info']).length === 0) {		
