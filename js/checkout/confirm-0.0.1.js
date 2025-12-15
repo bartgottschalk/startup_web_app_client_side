@@ -106,8 +106,6 @@ checkout_allowed_callback = function( data, textStatus, xhr ) {
 load_confirm_items = function( data, textStatus, xhr ) {
     //console.log(data);
 
-    // New Checkout Sessions flow - no payment entry on our site
-    // Stripe hosted checkout collects payment AND shipping info
     if ($.user_logged_in) {
         $('#confirm-order-agree-terms-of-sale').removeClass('hide');
         $('#confirm-checkout-button-wrapper-bottom').removeClass('hide');
@@ -313,10 +311,6 @@ load_confirm_payment_data = function( data, textStatus, xhr ) {
     //console.log(data);
     //console.log('number_of_items_in_order is ' + number_of_items_in_order);
 
-    // New Checkout Sessions flow - no need for Stripe token setup
-    // User will enter payment info on Stripe's hosted checkout page
-
-    // For logged-in users, show the checkout button
     if ($.user_logged_in) {
         $('#login-create-account-continue-anon-subheader').remove();
         $('#login-create-account-continue-anon-wrapper').remove();
@@ -328,10 +322,8 @@ load_confirm_payment_data = function( data, textStatus, xhr ) {
         check_if_checkout_ready();
     }
 };
-// ===== Deprecated Stripe Checkout v2 Functions (TO BE REMOVED) =====
-// These functions are deprecated and should not be called
-// They reference removed variables and will be deleted in a future cleanup
 /* eslint-disable no-undef */
+// Legacy code - will be removed in future update
 
 change_confirmation_email_address = function () {
     //console.log('in change_confirmation_email_address');
@@ -477,9 +469,6 @@ process_stripe_payment_token_callback = function( data, textStatus, xhr ) {
 set_up_confirm_form_listeners = function() {
     //console.log('set_up_confirm_form_listeners called');
 
-    // Removed deprecated "Enter Payment Info" button handler
-    // New flow: User clicks "Place Order" which redirects to Stripe Checkout
-
     $('#confirm-order-terms-of-sale-agree').change(function(e){
         //console.log('confirm-order-terms-of-sale-agree changed');
         confirm_order_terms_of_sale_agree_changed();
@@ -567,9 +556,6 @@ look_up_anonymous_email_address_callback = function( data, textStatus, xhr ) {
     if (data['anonymous_email_address_payment_lookup'] == 'success') {
         //console.log('anonymous_email_address_payment_lookup success');
 
-        // New Checkout Sessions flow - no need for Stripe token setup
-        // Email will be passed to Stripe Checkout Session
-
         $('#login-create-account-continue-anon-subheader').remove();
         $('#login-create-account-continue-anon-wrapper').remove();
         $('#confirm-anonymous-email-address-wrapper').remove();
@@ -641,7 +627,6 @@ confirm_order_terms_of_sale_agree_changed = function(){
 
 check_if_checkout_ready = function () {
     if (confirm_order_terms_of_sale_agree_field.is(':checked')) {
-        // New Checkout Sessions flow - no token needed, just redirect to Stripe
         $('#place-order-button-bottom').click(function(e){
             //console.log('place-order-button-bottom clicked');
             create_stripe_checkout_session();
@@ -844,9 +829,8 @@ cart_check_for_valid_checkout_conditions = function () {
 };
 
 /* eslint-enable no-undef */
-// ===== End Deprecated Functions =====
 
-// ===== New Stripe Checkout Sessions Functions =====
+// Stripe Checkout Sessions Functions
 
 var create_stripe_checkout_session = function() {
     //console.log('create_stripe_checkout_session called');
