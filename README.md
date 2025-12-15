@@ -1,5 +1,19 @@
-# Note 
-I no longer control the domain startupwebapp.com and am not responsbile for the content that is currently served from that domain. Use caution if you go there. 
+# Note
+I no longer control the domain startupwebapp.com and am not responsbile for the content that is currently served from that domain. Use caution if you go there.
+
+## ⚠️ Important: Demo Project - TEST Mode Only
+
+**This is a demonstration/template project, not a real business.**
+
+This application is designed to showcase e-commerce functionality and serves as a template for real businesses. The deployed production site uses **Stripe TEST mode** and accepts only test credit cards (4242 4242 4242 4242). No real payment processing occurs.
+
+**For Real Businesses:**
+- Fork this repository for your own business
+- Configure Stripe LIVE mode keys in your fork
+- You'll inherit battle-tested payment infrastructure
+- See backend repository for AWS deployment instructions
+
+**Production Demo:** https://startupwebapp.mosaicmeshai.com (TEST mode only)
 
 # startup_web_app_client_side
 I'm co-founder of a startup which
