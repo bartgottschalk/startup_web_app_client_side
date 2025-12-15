@@ -149,7 +149,7 @@ start_checkout_tests = function () {
 			var testSessionUrl = 'https://checkout.stripe.com/c/pay/test_session_123';
 			var responseData = {
 				'create_checkout_session': 'success',
-				'session_url': testSessionUrl
+				'checkout_url': testSessionUrl
 			};
 
 			// The function will try to redirect, which we can't fully test in unit tests

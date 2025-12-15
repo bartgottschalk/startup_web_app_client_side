@@ -935,15 +935,15 @@ var handle_checkout_session_success = function(data, textStatus, xhr) {
 
     if (data['create_checkout_session'] == 'success') {
         //console.log('create_checkout_session successful');
-        //console.log('session_url is ' + data['session_url']);
+        //console.log('checkout_url is ' + data['checkout_url']);
 
         // Redirect to Stripe Checkout
-        window.location.href = data['session_url'];
+        window.location.href = data['checkout_url'];
     }
     else {
         //console.log('handle_checkout_session_success error');
         $('.create-account-loader-wrapper').remove();
-        $('#confirm-checkout-button-wrapper-bottom').append('<div id="place-order-button-bottom" class="confirm-order-button"><span id="place-order-button-span" class="confirm-order-button-span confirm-order-button-disabled-span">PLACE ORDER</span></div>');
+        $('#confirm-checkout-button-wrapper-bottom').append('<div id="place-order-button-bottom" class="confirm-order-button"><span id="place-order-button-span" class="confirm-order-button-span confirm-order-button-disabled-span">CONTINUE TO PAYMENT</span></div>');
         check_if_checkout_ready();
 
         var errors = [];
