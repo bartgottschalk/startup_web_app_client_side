@@ -27,15 +27,15 @@ $(document).ready(function() {
             $.log_client_event('ajaxerror', 'order-checkout-session-success');
 
             switch (xhr.status) {
-                case 404:
-                    show_error('Checkout session not found. Please contact support if you completed a payment.');
-                    break;
-                case 500:
-                    show_error('An error occurred while processing your order. Please contact support.');
-                    break;
-                default:
-                    show_error('An unexpected error occurred. Please contact support if you completed a payment.');
-                    break;
+            case 404:
+                show_error('Checkout session not found. Please contact support if you completed a payment.');
+                break;
+            case 500:
+                show_error('An error occurred while processing your order. Please contact support.');
+                break;
+            default:
+                show_error('An unexpected error occurred. Please contact support if you completed a payment.');
+                break;
             }
         });
 });
