@@ -1,10 +1,6 @@
-var token_retried = false;
 var env_vars = $.env_vars();
 var email_verification_code;
 var email_verified;
-var stripe_checkout_handler = null;
-var stripe_payment_token = null;
-var stripe_payment_args = null;
 
 $(document).ready(function() {
     //console.log(env_vars);
@@ -83,7 +79,6 @@ load_account = function( data, textStatus, xhr ) {
 
         $('.section-title').removeClass('hide');
         $('#my-information-sub-header').removeClass('hide');
-        $('#my-shipping-billing-address-payment-info-sub-header').removeClass('hide');
         $('#my-communication-preferences-sub-header').removeClass('hide');
         $('#my-password-sub-header').removeClass('hide');
         $('#my-orders-sub-header').removeClass('hide');
@@ -93,12 +88,6 @@ load_account = function( data, textStatus, xhr ) {
         $('#account-info').append('<div class="account-item"><span class="account-my-information-label">Name</span>: <span class="account-my-information-value">' + data['account_content']['personal_data']['first_name'] + ' ' + data['account_content']['personal_data']['last_name']  + '</span></div>');
         $('#account-info').append('<div class="account-item"><span class="account-my-information-label">Email Address</span>: <span class="account-my-information-value">' + data['account_content']['email_data']['email_address'] + '</span></div>');
         $('#account-info').append('<div id="verify-email" class="account-item"><span class="account-my-information-label">Email Verified</span>: <span id="email-verified-value" class="account-my-information-value">' + email_verified_str + '</span>' + verify_email_button + email_verification_sent_str + '</div>');
-
-
-        stripe_payment_token = data['account_content']['shipping_billing_addresses_and_payment_data']['token'];
-        stripe_payment_args = data['account_content']['shipping_billing_addresses_and_payment_data']['args'];
-        display_payment_data();
-        set_up_stripe_checkout_handler(data['account_content']['email_data']['email_address'], data['account_content']['stripe_publishable_key']);
 
         $('#communication-preferences-info').append('<div class="account-item"><div class="account-change-password-wrapper"><a href="/account/edit-communication-preferences">Edit Communication Preferences</a></div></div>');
         $('#communication-preferences-info').append('<div class="account-item"><span class="account-my-information-label">Unsubscribed from Newsletters and Marketing Communication</span>: <span class="account-my-information-value">' + email_unsubscribed_str + '</span></div>');
@@ -166,138 +155,6 @@ load_account = function( data, textStatus, xhr ) {
         window.location = '/login?next=account' + email_verification_code_url_str;
     }
 
-};
-
-set_up_stripe_checkout_handler = function (email, stripe_publishable_key) {
-    var description_str = 'Update Shipping and Billing Info';
-    stripe_checkout_handler = StripeCheckout.configure({
-        key: stripe_publishable_key,
-        name: 'StartupWebApp.com',
-        panelLabel: 'Save',
-        description: description_str,
-        zipCode: true,
-        email: email,
-        locale: 'auto',
-        billingAddress: true,
-        shippingAddress: true,
-        amount: 0,
-        token: stripe_checkout_handler_token_callback
-    });	 	
-};
-stripe_checkout_handler_token_callback = function(token, args) {
-    //console.log(token);
-    //console.log(token.card);
-    //console.log('args are...');
-    //console.log(args);
-    // You can access the token ID with `token.id`.
-    // Get the token ID to your server-side code for use.
-    stripe_checkout_handler.close();
-
-    stripe_payment_token = token;
-    stripe_payment_args = args;
-    display_payment_data();
-    process_stripe_payment_token();
-};
-
-process_stripe_payment_token = function() {
-    //console.log('stripe_payment_args are...');
-    //console.log(stripe_payment_args);
-    var json_data = {'stripe_token':stripe_payment_token.id, 'email':stripe_payment_token.email, 'stripe_payment_args':JSON.stringify(stripe_payment_args)};
-
-    //console.log('json_data is ...');
-    //console.log(json_data);
-
-    $.ajax({
-        method: 'POST',
-        url: env_vars['api_url'] + '/user/process-stripe-payment-token',
-        dataType: 'json',
-	    xhrFields: {
-	        withCredentials: true
-	    },
-	    data: json_data,
-        success: process_stripe_payment_token_callback,
-        beforeSend: function(request) {
-		    //console.log('in beforeSend');
-		    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
-	    }
-    })
-        .fail(function(xhr, textStatus, errorThrown) {
-	    //console.log('post update-my-information failed');
-        //console.log('xhr.status is ' + xhr.status);
-            $.log_client_event('ajaxerror', 'user-process-stripe-payment-token');
-            switch (xhr.status) {
-	        case 403:
-	           // handle unauthorized
-                if (token_retried == false) {
-                    //console.log('retrying token');
-                    token_retried = true;
-                    $.get_token(process_stripe_payment_token);
-                }
-                else {
-		        	$.display_page_fatal_error('my-account-body');
-		           	break;
-		    	}
-	        	break;
-	        default:
-	        	$.display_page_fatal_error('my-account-body');
-	           	break;
-	    }	        
-        });	
-};
-process_stripe_payment_token_callback = function( data, textStatus, xhr ) {
-    //console.log(data);
-
- 	if (data['process_stripe_payment_token'] == 'success') {
-        console.log('process_stripe_payment_token successful');
-    }
-    else {
-        //console.log('process_stripe_payment_token_callback error');
-        var errors = [];
-        if (data['errors']['error'] == 'stripe-token-required') {
-            errors.push({'type': 'stripe-token-required','description': 'An error occurred while processing your payment.'});
-            $.display_errors(errors, $('#confirm-order-terms-of-sale-agree-error'), $('#confirm-order-terms-of-sale-agree'), 'place-order-error-', true, null, 'confirm-order-form-error-text');
-            $.log_client_event('ajaxerror', 'confirm-stripe-token-required');
-        }
-        else if (data['errors']['error'] == 'error-creating-stripe-customer') {
-            errors.push({'type': 'error-creating-stripe-customer','description': 'An error occurred while processing your payment.'});
-            $.display_errors(errors, $('#confirm-order-terms-of-sale-agree-error'), $('#confirm-order-terms-of-sale-agree'), 'place-order-error-', true, null, 'confirm-order-form-error-text');
-            $.log_client_event('ajaxerror', 'confirm-error-creating-stripe-customer');
-        }
-        else {
-            errors.push({'type': 'confirm-undefined','description': 'There was an undefined error processing your request.'});
-            $.display_errors(errors, $('#confirm-order-terms-of-sale-agree-error'), $('#confirm-order-terms-of-sale-agree'), 'place-order-error-', true, null, 'confirm-order-form-error-text');
-            $.log_client_event('ajaxerror', 'confirm-error-creating-stripe-customer-undefined');
-        }
-    }
-};
-
-display_payment_data = function() {
-
-    $('#my-shipping-billing-address-payment-info').html('');
-    $('#my-shipping-billing-address-payment-info').append('<div class="account-item"><div class="account-change-password-wrapper"><a id="edit_shipping_and_billing_addresses_and_payment_info" href="/account">Edit Shipping & Billing Addresses and Payment Information</a></div></div>');
-    //console.log(stripe_payment_args);
-    if (typeof stripe_payment_args == 'undefined' || typeof stripe_payment_token == 'undefined') {
-        $('#my-shipping-billing-address-payment-info').append('<div class="account-item"><span class="account-my-information-value">No shipping or billing information is associated with your account.</span></div>');
-    }
-    else {
-        if (typeof stripe_payment_args.shipping_address_state == 'undefined') {
-            stripe_payment_args.shipping_address_state = '';
-        }
-        if (typeof stripe_payment_args.billing_address_state == 'undefined') {
-            stripe_payment_args.billing_address_state = '';
-        }
-        $('#my-shipping-billing-address-payment-info').append('<div class="account-item"><div class="account-address-wrapper account-address-label-wrapper"><span class="account-my-information-label">Shipping Address</span>: </div><div class="account-address-wrapper"><span class="account-my-information-value">' + stripe_payment_args['shipping_name'] + '<br>' + stripe_payment_args['shipping_address_line1'] + '<br>' + stripe_payment_args['shipping_address_city'] + ', ' + stripe_payment_args['shipping_address_state'] + ' ' + stripe_payment_args['shipping_address_zip'] + '<br>' + stripe_payment_args['shipping_address_country'] + '</span></div></div>');
-        $('#my-shipping-billing-address-payment-info').append('<div class="account-item"><div class="account-address-wrapper account-address-label-wrapper"><span class="account-my-information-label">Billing Address</span>: </div><div class="account-address-wrapper"><span class="account-my-information-value">' + stripe_payment_args['billing_name'] + '<br>' + stripe_payment_args['billing_address_line1'] + '<br>' + stripe_payment_args['billing_address_city'] + ', ' + stripe_payment_args['billing_address_state'] + ' ' + stripe_payment_args['billing_address_zip'] + '<br>' + stripe_payment_args['billing_address_country'] + '</span></div></div>');
-        $('#my-shipping-billing-address-payment-info').append('<div class="account-item"><div class="account-address-wrapper account-address-label-wrapper"><span class="account-my-information-label">Payment Information</span>: </div><div class="account-address-wrapper"><span class="account-my-information-value">' + stripe_payment_token['card']['brand'] + ': **** **** **** ' + stripe_payment_token['card']['last4'] + ', Exp: ' + stripe_payment_token['card']['exp_month'] + '/' + stripe_payment_token['card']['exp_year'] + '</span></div></div>');
-    }
-
-    $('#edit_shipping_and_billing_addresses_and_payment_info').click(function (event) {
-        //console.log('edit_shipping_and_billing_addresses_and_payment_info clicked');
-        stripe_checkout_handler.open({
-        });
-        // prevent link redirection
-        return false;
-    });
 };
 
 verify_email_address = function () {
