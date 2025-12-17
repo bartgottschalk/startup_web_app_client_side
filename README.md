@@ -1,6 +1,8 @@
 # Note
 I no longer control the domain startupwebapp.com and am not responsbile for the content that is currently served from that domain. Use caution if you go there.
 
+![PR Validation](https://github.com/bartgottschalk/startup_web_app_client_side/actions/workflows/pr-validation.yml/badge.svg)
+
 ## ⚠️ Important: Demo Project - TEST Mode Only
 
 **This is a demonstration/template project, not a real business.**
@@ -195,17 +197,33 @@ npx eslint js/**/*.js
 
 ### Testing
 
-Frontend unit tests use QUnit 2.9.2.
+Frontend unit tests use QUnit 2.9.2 with Playwright for headless browser testing.
 
 **Run tests in browser:**
-- http://localhost:8080/unittests/index_tests.html (utility tests)
-- http://localhost:8080/unittests/checkout_confirm_tests.html (checkout tests - added December 2025)
+- http://localhost:8080/unittests/index_tests.html (69 utility tests)
+- http://localhost:8080/unittests/checkout_confirm_tests.html (19 checkout tests)
+
+**Run tests from command line:**
+```bash
+# Install dependencies
+npm install
+
+# Install Playwright browsers
+npx playwright install chromium
+
+# Run all tests in headless browser
+npm test
+
+# Run tests with visible browser (for debugging)
+npm run test:headed
+```
 
 **Test Coverage Status:**
 - **Tested:** 4 files (index-0.0.2.js, utilities/*.js, checkout/confirm-0.0.1.js)
 - **Total:** 20 JavaScript files (includes new checkout/success-0.0.1.js)
 - **Coverage:** ~20% of JavaScript files
-- **Tests:** 13 checkout tests + existing utility tests
+- **Tests:** 88 tests total (19 checkout tests + 69 utility tests)
+- **CI/CD:** All tests run automatically on every pull request
 - **Future work:** Expand test coverage to remaining files, particularly:
   - product-0.0.1.js (product display and SKU selection)
   - cart-0.0.1.js (shopping cart functionality)
