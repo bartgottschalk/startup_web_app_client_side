@@ -13,6 +13,11 @@
 # Node modules (for QUnit testing)
 node_modules/
 
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
 # Logs
 *.log
 npm-debug.log*

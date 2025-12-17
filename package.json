@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint js/",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "playwright test",
+    "test:headed": "playwright test --headed"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,8 @@
   },
   "homepage": "https://github.com/bartgottschalk/startup_web_app_client_side#readme",
   "devDependencies": {
-    "eslint": "^9.39.1"
+    "@playwright/test": "^1.48.0",
+    "eslint": "^9.39.1",
+    "http-server": "^14.1.1"
   }
 }
