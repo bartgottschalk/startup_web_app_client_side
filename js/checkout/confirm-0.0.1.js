@@ -613,6 +613,11 @@ var create_stripe_checkout_session = function() {
             'save_defaults': save_defaults_val
         };
 
+        // For anonymous users, include the email address to pre-fill Stripe checkout
+        if (!$.user_logged_in) {
+            json_data['anonymous_email_address'] = anonymous_email_address_field.val();
+        }
+
         //console.log('json_data is', json_data);
 
         $.ajax({
