@@ -114,7 +114,6 @@ load_confirm_items = function( data, textStatus, xhr ) {
         $('#confirm-checkout-button-wrapper-bottom').prepend('<div class="confirm-order-agree-terms-of-sale-wrapper confirm-order-sign-up-for-marketing-email-wrapper"><input type="checkbox" class="confirm-order-agree-terms-of-sale-checkbox" id="confirm-order-sign-up-for-marketing-emails" title="Sign Up for Markeing Emails">&nbsp;Sign up to receive marketing emails from StartupWebApp.com according to our <a href="/terms-of-use" target="_blank">Terms of Use</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a>.</div>');
         $('#login-create-account-continue-anon-subheader').removeClass('hide');
         $('#login-create-account-continue-anon-wrapper').removeClass('hide');
-        $('#save-shipping-and-billing-info').addClass('hide');
     }
 
     if (data['cart_found'] == true) {
@@ -291,18 +290,20 @@ load_confirm_totals = function( data, textStatus, xhr ) {
     }
 
     // Show/hide UI elements based on logged-in status
-    // Note: Removed deprecated /order/confirm-payment-data API call (Session 8 backend cleanup)
-    // User logged-in status is already set by index.js at this point in the load sequence
-    if ($.user_logged_in) {
-        $('#login-create-account-continue-anon-subheader').remove();
-        $('#login-create-account-continue-anon-wrapper').remove();
-        $('#confirm-anonymous-email-address-wrapper').remove();
+    // Wait for login status check to complete before showing UI
+    // This prevents race condition where $.user_logged_in might not be set yet
+    $.loginStatusReady.then(function() {
+        if ($.user_logged_in) {
+            $('#login-create-account-continue-anon-subheader').remove();
+            $('#login-create-account-continue-anon-wrapper').remove();
+            $('#confirm-anonymous-email-address-wrapper').remove();
 
-        $('#confirm-order-agree-terms-of-sale').removeClass('hide');
-        $('#confirm-checkout-button-wrapper-bottom').removeClass('hide');
+            $('#confirm-order-agree-terms-of-sale').removeClass('hide');
+            $('#confirm-checkout-button-wrapper-bottom').removeClass('hide');
 
-        check_if_checkout_ready();
-    }
+            check_if_checkout_ready();
+        }
+    });
 
 };
 /* eslint-disable no-undef */
@@ -597,10 +598,9 @@ var create_stripe_checkout_session = function() {
         }
     }
     else {
+        // Note: Stripe Checkout Sessions don't save payment info
+        // Always set to false (removed checkbox from UI)
         save_defaults_val = 'false';
-        if ($('#save-shipping-and-payment-info').is(':checked')) {
-            save_defaults_val = 'true';
-        }
     }
 
     if (confirm_order_terms_of_sale_agree_valid.length == 0) {
