@@ -106,9 +106,6 @@
                     </div>
                 </div>
                 <div id="confirm-order-payment-shipping-error" class="confirm-order-form-error-text-hidden"></div>
-                <div id="save-shipping-and-billing-info" class="confirm-order-agree-terms-of-sale-wrapper">
-                    <input type="checkbox" class="confirm-order-agree-terms-of-sale-checkbox" id="save-shipping-and-payment-info" title="Save Shipping and Payment Information in My Account">&nbsp;Save shipping and payment information in my account according to our <a href="/terms-of-use" target="_blank">Terms of Use</a> and <a href="/privacy-policy" target="_blank">Privacy Policy</a>.
-                </div>
                 <div id="confirm-order-agree-terms-of-sale" class="confirm-order-agree-terms-of-sale-wrapper hide">
                     <input type="checkbox" class="confirm-order-agree-terms-of-sale-checkbox" id="confirm-order-terms-of-sale-agree" title="Agree to Terms of Sale">&nbsp;By checking this box you agree to the <a href="/terms-of-sale" target="_blank">Terms of Sale</a>.
                 </div>

@@ -111,7 +111,9 @@ post_header = function() {
         window.location = '/cart?referrer=' + window.location.pathname + '&query=' + $.urlParam('search') + '&tag=' + $.urlParam('tag');
     });
 
-    $.ajax({
+    // Expose login status check as a promise that other pages can wait for
+    // This prevents race conditions where pages check $.user_logged_in before it's set
+    $.loginStatusReady = $.ajax({
         method: 'GET',
         url: env_vars['api_url'] + '/user/logged-in',
         dataType: 'json',
@@ -327,7 +329,7 @@ set_logged_in = function( data, textStatus, xhr ) {
 		    case '/reset-password':
             window.location = '/account';
 		        break;
-        }		
+        }
     }
 
     if (data['log_client_events'] == true) {
@@ -461,7 +463,7 @@ set_logged_in = function( data, textStatus, xhr ) {
     	$('#hamburger-menu-open').addClass('container-menu-expanded-' + $('#hamburger-menu-open').children().length);
 
         //$('#menu-logout-link').removeAttr('href');
-    });	
+    });
 };
 
 $.check_termsofserviceisagreed_member = function () {
