@@ -290,27 +290,9 @@ load_confirm_totals = function( data, textStatus, xhr ) {
 
     }
 
-    $.ajax({
-        method: 'GET',
-        url: env_vars['api_url'] + '/order/confirm-payment-data',
-        dataType: 'json',
-	    xhrFields: {
-	        withCredentials: true
-	    },
-        success: load_confirm_payment_data
-    })
-        .fail(function() {
-	    //console.log('get account_content failed');
-            $.log_client_event('ajaxerror', 'confirm-payment-data');
-            $.display_page_fatal_error('confirm-detail-body', '<div id="account-info" class="account-section-details">We\'re sorry. An error has occurred while loading this page. Please try refreshing the page. If that doesn\'t work, please clear browser cache and cookies and try reloading again.</div>');
-        });
-
-};
-
-load_confirm_payment_data = function( data, textStatus, xhr ) {
-    //console.log(data);
-    //console.log('number_of_items_in_order is ' + number_of_items_in_order);
-
+    // Show/hide UI elements based on logged-in status
+    // Note: Removed deprecated /order/confirm-payment-data API call (Session 8 backend cleanup)
+    // User logged-in status is already set by index.js at this point in the load sequence
     if ($.user_logged_in) {
         $('#login-create-account-continue-anon-subheader').remove();
         $('#login-create-account-continue-anon-wrapper').remove();
@@ -321,6 +303,7 @@ load_confirm_payment_data = function( data, textStatus, xhr ) {
 
         check_if_checkout_ready();
     }
+
 };
 /* eslint-disable no-undef */
 // Legacy code - will be removed in future update
@@ -391,79 +374,6 @@ display_payment_data = function() {
         //console.log('change-confirmation-email-address clicked');
         change_confirmation_email_address();
     });
-};
- 
-process_stripe_payment_token = function() {
-    //console.log('stripe_payment_args are...');
-    //console.log(stripe_payment_args);
-    var json_data = {'stripe_token':stripe_payment_token.id, 'email':stripe_payment_token.email, 'stripe_payment_args':JSON.stringify(stripe_payment_args)};
-
-    //console.log('json_data is ...');
-    //console.log(json_data);
-
-    $.ajax({
-        method: 'POST',
-        url: env_vars['api_url'] + '/order/process-stripe-payment-token',
-        dataType: 'json',
-	    xhrFields: {
-	        withCredentials: true
-	    },
-	    data: json_data,
-        success: process_stripe_payment_token_callback,
-        beforeSend: function(request) {
-		    //console.log('in beforeSend');
-		    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
-	    }
-    })
-        .fail(function(xhr, textStatus, errorThrown) {
-	    //console.log('post update-my-information failed');
-        //console.log('xhr.status is ' + xhr.status);
-            $.log_client_event('ajaxerror', 'order-process-stripe-payment-token');
-            switch (xhr.status) {
-	        case 403:
-	           // handle unauthorized
-                if (token_retried == false) {
-                    //console.log('retrying token');
-                    token_retried = true;
-                    $.get_token(process_stripe_payment_token);
-                }
-                else {
-		        	$.display_page_fatal_error('confirm-detail-body');
-		           	break;
-		    	}
-	        	break;
-	        default:
-	        	$.display_page_fatal_error('confirm-detail-body');
-	           	break;
-	    }	        
-        });	
-};
-process_stripe_payment_token_callback = function( data, textStatus, xhr ) {
-    //console.log(data);
-
- 	if (data['process_stripe_payment_token'] == 'success') {
-        //console.log('process_stripe_payment_token successful');
-        check_if_checkout_ready();
-    }
-    else {
-        //console.log('process_stripe_payment_token_callback error');
-        var errors = [];
-        if (data['errors']['error'] == 'stripe-token-required') {
-            errors.push({'type': 'stripe-token-required','description': 'An error occurred while processing your payment.'});
-            $.display_errors(errors, $('#confirm-order-terms-of-sale-agree-error'), $('#confirm-order-terms-of-sale-agree'), 'place-order-error-', true, null, 'confirm-order-form-error-text');
-            $.log_client_event('ajaxerror', 'confirm-stripe-token-required');
-        }
-        else if (data['errors']['error'] == 'error-creating-stripe-customer') {
-            errors.push({'type': 'error-creating-stripe-customer','description': 'An error occurred while processing your payment.'});
-            $.display_errors(errors, $('#confirm-order-terms-of-sale-agree-error'), $('#confirm-order-terms-of-sale-agree'), 'place-order-error-', true, null, 'confirm-order-form-error-text');
-            $.log_client_event('ajaxerror', 'confirm-error-creating-stripe-customer');
-        }
-        else {
-            errors.push({'type': 'confirm-undefined','description': 'There was an undefined error processing your request.'});
-            $.display_errors(errors, $('#confirm-order-terms-of-sale-agree-error'), $('#confirm-order-terms-of-sale-agree'), 'place-order-error-', true, null, 'confirm-order-form-error-text');
-            $.log_client_event('ajaxerror', 'confirm-error-creating-stripe-customer-undefined');
-        }
-    }
 };
 
 set_up_confirm_form_listeners = function() {
@@ -636,175 +546,6 @@ check_if_checkout_ready = function () {
     else {
         $('#place-order-button-bottom').unbind('click');
         $('#place-order-button-span').addClass('confirm-order-button-disabled-span');
-    }
-};
-
-confirm_place_order = function(event) {
-
-    confirm_order_terms_of_sale_agree_field.attr('class', 'confirm-order-agree-terms-of-sale-checkbox');
-    confirm_order_terms_of_sale_agree_error.attr('class', 'confirm-order-form-error-text-hidden');
-    confirm_order_terms_of_sale_agree_error.empty();
-
-    var confirm_order_terms_of_sale_agree_val = 'false';
-    if (confirm_order_terms_of_sale_agree_field.is(':checked')) {
-        confirm_order_terms_of_sale_agree_val = 'true';
-    }
-
-    //console.log('newsletter_val is ' + newsletter_val);
-    var confirm_order_terms_of_sale_agree_valid = $.isTermsOfUseAgreeValid(confirm_order_terms_of_sale_agree_val);
-    $.display_errors(confirm_order_terms_of_sale_agree_valid, confirm_order_terms_of_sale_agree_error, confirm_order_terms_of_sale_agree_field, 'terms_of_sale_agree_', true, null, 'confirm-order-form-error-text');
-
-    var newsletter_val = null;
-    var save_defaults_val = null;
-    if (!$.user_logged_in) {
-        newsletter_val = 'false';
-        if ($('#confirm-order-sign-up-for-marketing-emails').is(':checked')) {
-            newsletter_val = 'true';
-        }
-    }
-    else {
-        save_defaults_val = 'false';
-        if ($('#save-shipping-and-payment-info').is(':checked')) {
-            save_defaults_val = 'true';
-        }
-    }
-
-    confirm_order_payment_shipping_error.attr('class', 'confirm-order-form-error-text-hidden');
-    confirm_order_payment_shipping_error.empty();
-    if (stripe_payment_token == null || stripe_payment_args == null) {
-        confirm_order_payment_shipping_error.append('You must enter payment and shipping information prior to completing your order.');
-        confirm_order_payment_shipping_error.attr('class', 'confirm-order-form-error-text');
-    }
-
-    //console.log(stripe_payment_token);
-    //console.log(stripe_payment_args);
-
-    if (confirm_order_terms_of_sale_agree_valid.length == 0 && stripe_payment_token != null && stripe_payment_args != null) {
-	    $('#place-order-button-bottom').remove();
-	    $('#confirm-checkout-button-wrapper-bottom').append('<div class="create-account-loader-wrapper"><div class="create-account-loader"></div></div>');
-
-
-
-	    var stripe_payment_info = {'email':stripe_payment_token.email,
-	    						   'payment_type':stripe_payment_token.type,
-	    						   'card_name':stripe_payment_token.card.name,
-	    						   'card_brand':stripe_payment_token.card.brand,
-	    						   'card_last4':stripe_payment_token.card.last4,
-	    						   'card_exp_month':stripe_payment_token.card.exp_month,
-	    						   'card_exp_year':stripe_payment_token.card.exp_year,
-	    						   'card_zip':stripe_payment_token.card.address_zip,
-        };
-	    var stripe_shipping_addr = {'name':stripe_payment_args.shipping_name,
-            'address_line1':stripe_payment_args.shipping_address_line1,
-            'address_city':stripe_payment_args.shipping_address_city,
-            'address_state':stripe_payment_args.shipping_address_state,
-            'address_zip':stripe_payment_args.shipping_address_zip,
-            'address_country':stripe_payment_args.shipping_address_country,
-            'address_country_code':stripe_payment_args.shipping_address_country_code,
-	    };
-	    var stripe_billing_addr = {'name':stripe_payment_args.billing_name,
-								   'address_line1':stripe_payment_args.billing_address_line1,
-								   'address_city':stripe_payment_args.billing_address_city,
-								   'address_state':stripe_payment_args.billing_address_state,
-								   'address_zip':stripe_payment_args.billing_address_zip,
-								   'address_country':stripe_payment_args.billing_address_country,
-								   'address_country_code':stripe_payment_args.billing_address_country_code,
-	    };
-        var json_data = {'agree_to_terms_of_sale':confirm_order_terms_of_sale_agree_field.is(':checked'),
-						 'newsletter':newsletter_val, 
-						 'save_defaults':save_defaults_val,
-						 'stripe_payment_info':JSON.stringify(stripe_payment_info),
-						 'stripe_shipping_addr':JSON.stringify(stripe_shipping_addr),
-						 'stripe_billing_addr':JSON.stringify(stripe_billing_addr)
-        };
-
-        //console.log('json_data is ' + json_data);
-
-        $.ajax({
-            method: 'POST',
-            url: env_vars['api_url'] + '/order/confirm-place-order',
-            dataType: 'json',
-		    xhrFields: {
-		        withCredentials: true
-		    },
-		    data: json_data,
-            success: confirm_place_order_callback,
-            beforeSend: function(request) {
-			    //console.log('in beforeSend');
-			    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
-		    }
-        })
-            .fail(function(xhr, textStatus, errorThrown) {
-		    //console.log('post update-my-information failed');
-	        //console.log('xhr.status is ' + xhr.status);
-                $.log_client_event('ajaxerror', 'order-place-order');
-                switch (xhr.status) {
-		        case 403:
-		           // handle unauthorized
-                    if (token_retried == false) {
-                        //console.log('retrying token');
-                        token_retried = true;
-                        $.get_token(confirm_place_order);
-                    }
-                    else {
-			        	$.display_page_fatal_error('confirm-detail-body');
-			           	break;
-			    	}
-		        	break;
-		        default:
-		        	$.display_page_fatal_error('confirm-detail-body');
-		           	break;
-		    }	        
-            });
-    }
-};
-confirm_place_order_callback = function( data, textStatus, xhr ) {
-    //console.log(data);
-    //console.log('confirm_update_shipping_method_callback called');
-
- 	if (data['confirm_place_order'] == 'success') {
-        //console.log('place order successful');
-        //console.log('order_identifier is ' + data['order_identifier']);
-        window.location = '/account/order?identifier=' + data['order_identifier'];
-    }
-    else {
-
-	    $('.create-account-loader-wrapper').remove();
-	    $('#confirm-checkout-button-wrapper-bottom').append('<div id="place-order-button-bottom" class="confirm-order-button"><span id="place-order-button-span" class="confirm-order-button-span confirm-order-button-disabled-span">PLACE ORDER</span></div>');
-        confirm_order_terms_of_sale_agree_changed();
-
-        //console.log('confirm_place_order_callback error');
-        var errors = [];
-        if (data['errors']['error'] == 'error-saving-order') {
-            errors.push({'type': 'confirm-error-saving-order','description': 'An error occurred while processing your order.'});
-            $.display_errors(errors, $('#confirm-order-terms-of-sale-agree-error'), $('#confirm-order-terms-of-sale-agree'), 'place-order-error-', true, null, 'confirm-order-form-error-text');
-            $.log_client_event('ajaxerror', 'confirm-error-saving-order');
-        }
-        else if (data['errors']['error'] == 'cart-not-found') {
-            errors.push({'type': 'cart-not-found','description': 'No cart was found.'});
-            $.display_errors(errors, $('#confirm-order-terms-of-sale-agree-error'), $('#confirm-order-terms-of-sale-agree'), 'place-order-error-', true, null, 'confirm-order-form-error-text');
-            $.log_client_event('ajaxerror', 'confirm-cart-not-found');
-        }
-        else if (data['errors']['error'] == 'agree-to-terms-of-sale-must-be-checked') {
-            errors.push({'type': 'confirm-agree-to-terms-of-sale--must-be-checked','description': 'You must agree to the StartupWebApp.com <a href="/terms-of-sale" target="_blank">Terms of Sale</a>.'});
-            $.display_errors(errors, $('#confirm-order-terms-of-sale-agree-error'), $('#confirm-order-terms-of-sale-agree'), 'place-order-error-', true, null, 'confirm-order-form-error-text');
-            $.log_client_event('ajaxerror', 'confirm-agree-to-terms-of-sale-must-be-checked');
-        }
-        else if (data['errors']['error'] == 'agree-to-terms-of-sale-required') {
-            errors.push({'type': 'confirm-agree-to-terms-of-sale-required','description': 'You must agree to the StartupWebApp.com <a href="/terms-of-sale" target="_blank">Terms of Sale</a>.'});
-            $.display_errors(errors, $('#confirm-order-terms-of-sale-agree-error'), $('#confirm-order-terms-of-sale-agree'), 'place-order-error-', true, null, 'confirm-order-form-error-text');
-            $.log_client_event('ajaxerror', 'confirm-agree-to-terms-of-sale-required');
-        }
-        else if (data['errors']['error'] == 'error-saving-payment') {
-            errors.push({'type': 'confirm-error-saving-payment','description': 'An error occurred while processing your payment. Please refresh the page and try again.'});
-            $.display_errors(errors, $('#confirm-order-payment-shipping-error'), $('#confirm-order-terms-of-sale-agree'), 'place-order-error-', true, null, 'confirm-order-form-error-text');
-            $.log_client_event('ajaxerror', 'confirm-error-saving-payment');
-        }
-        else {
-            errors.push({'type': 'confirm-undefined','description': 'There was an undefined error processing your request.'});
-            $.display_errors(errors, $('#confirm-order-terms-of-sale-agree-error'), $('#confirm-order-terms-of-sale-agree'), 'place-order-error-', true, null, 'confirm-order-form-error-text');
-            $.log_client_event('ajaxerror', 'confirm-undefined');
-        }
     }
 };
 
