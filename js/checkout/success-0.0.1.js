@@ -73,6 +73,6 @@ var handle_checkout_success = function(data, textStatus, xhr) {
 
 var show_error = function(message) {
     $('#success-message').addClass('hide');
-    $('#success-error .information-item').html(message);
+    $('#success-error .information-item').text(message);
     $('#success-error').removeClass('hide');
 };

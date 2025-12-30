@@ -21,15 +21,10 @@ start_tests = function () {
 		env_vars = $.env_vars();
 		assert.equal(env_vars['api_url'], 'http://localapi.startupwebapp.com:8000', 'localhost.startupwebapp.com should route correctly');
 
-		// Test dev environment
-		window.startupwebapp.util.get_window_location_hostname = function() {return 'dev.startupwebapp.com'};
+		// Test production environment (default case)
+		window.startupwebapp.util.get_window_location_hostname = function() {return 'startupwebapp.mosaicmeshai.com'};
 		env_vars = $.env_vars();
-		assert.equal(env_vars['api_url'], 'https://devapi.startupwebapp.com', 'dev environment should use HTTPS');
-
-		// Test production environment
-		window.startupwebapp.util.get_window_location_hostname = function() {return 'www.startupwebapp.com'};
-		env_vars = $.env_vars();
-		assert.equal(env_vars['api_url'], 'https://api.startupwebapp.com', 'production should route to HTTPS API');
+		assert.equal(env_vars['api_url'], 'https://startupwebapp-api.mosaicmeshai.com', 'production should route to HTTPS API');
 	});
 
 	// ===== Form Validation Tests =====

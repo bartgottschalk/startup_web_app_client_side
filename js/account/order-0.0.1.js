@@ -38,7 +38,7 @@ load_order = function( data, textStatus, xhr ) {
         }
     }
     else {
-        $('#order-information').append('<div class="account-item"><span class="account-my-information-label">Order Identifier</span>: <span class="account-my-information-value">' + data['order_data']['order_attributes']['identifier'] + '</span></div>');
+        $('#order-information').append($('<div class="account-item"><span class="account-my-information-label">Order Identifier</span>: <span class="account-my-information-value"></span></div>').find('.account-my-information-value').text(data['order_data']['order_attributes']['identifier']).end());
 
         $('#order-wrapper').removeClass('hide');
         $('#order-information-sub-header').removeClass('hide');
@@ -162,20 +162,22 @@ load_order = function( data, textStatus, xhr ) {
             $('#shipping-address-details').append('<div class="account-item">This order has no shipping address</div>');
         }
         else {
-            $('#shipping-address-details').append('<div class="confirm-detail-line">' + data['order_data']['order_shipping_address']['name'] + '</div>');
-            $('#shipping-address-details').append('<div class="confirm-detail-line">' + data['order_data']['order_shipping_address']['address_line1'] + '</div>');
-            $('#shipping-address-details').append('<div class="confirm-detail-line">' + data['order_data']['order_shipping_address']['city'] + ', ' + data['order_data']['order_shipping_address']['state'] + ' ' + data['order_data']['order_shipping_address']['zip'] + '</div>');
-            $('#shipping-address-details').append('<div class="confirm-detail-line">' + data['order_data']['order_shipping_address']['country'] + '</div>');			
+            $('#shipping-address-details').append($('<div class="confirm-detail-line">').text(data['order_data']['order_shipping_address']['name']));
+            $('#shipping-address-details').append($('<div class="confirm-detail-line">').text(data['order_data']['order_shipping_address']['address_line1']));
+            var cityStateZip = data['order_data']['order_shipping_address']['city'] + ', ' + data['order_data']['order_shipping_address']['state'] + ' ' + data['order_data']['order_shipping_address']['zip'];
+            $('#shipping-address-details').append($('<div class="confirm-detail-line">').text(cityStateZip));
+            $('#shipping-address-details').append($('<div class="confirm-detail-line">').text(data['order_data']['order_shipping_address']['country']));			
         }
 
         if (Object.keys(data['order_data']['order_billing_address']).length === 0) {		
             $('#billing-address-details').append('<div class="account-item">This order has no billing address</div>');
         }
         else {
-            $('#billing-address-details').append('<div class="confirm-detail-line">' + data['order_data']['order_billing_address']['name'] + '</div>');
-            $('#billing-address-details').append('<div class="confirm-detail-line">' + data['order_data']['order_billing_address']['address_line1'] + '</div>');
-            $('#billing-address-details').append('<div class="confirm-detail-line">' + data['order_data']['order_billing_address']['city'] + ', ' + data['order_data']['order_billing_address']['state'] + ' ' + data['order_data']['order_billing_address']['zip'] + '</div>');
-            $('#billing-address-details').append('<div class="confirm-detail-line">' + data['order_data']['order_billing_address']['country'] + '</div>');
+            $('#billing-address-details').append($('<div class="confirm-detail-line">').text(data['order_data']['order_billing_address']['name']));
+            $('#billing-address-details').append($('<div class="confirm-detail-line">').text(data['order_data']['order_billing_address']['address_line1']));
+            var cityStateZip = data['order_data']['order_billing_address']['city'] + ', ' + data['order_data']['order_billing_address']['state'] + ' ' + data['order_data']['order_billing_address']['zip'];
+            $('#billing-address-details').append($('<div class="confirm-detail-line">').text(cityStateZip));
+            $('#billing-address-details').append($('<div class="confirm-detail-line">').text(data['order_data']['order_billing_address']['country']));
         }
 
         if (Object.keys(data['order_data']['order_payment_info']).length === 0) {
@@ -197,7 +199,9 @@ load_order = function( data, textStatus, xhr ) {
             $('#confirmation-email-detail-wrapper').append('<div class="account-item">This order has no confirmation email</div>');
         }
         else {
-            $('#confirmation-email-detail-wrapper').append('<div class="account-item"><div class="confirm-detail-line">An order confirmation/receipt was sent to: ' + data['order_data']['order_payment_info']['email'] + '.</div></div>');
+            var emailWrapper = $('<div class="account-item"><div class="confirm-detail-line">An order confirmation/receipt was sent to: </div></div>');
+            emailWrapper.find('.confirm-detail-line').append($('<span>').text(data['order_data']['order_payment_info']['email'])).append('.');
+            $('#confirmation-email-detail-wrapper').append(emailWrapper);
         }
     }
 };

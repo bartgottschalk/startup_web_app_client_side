@@ -29,7 +29,6 @@ $(document).ready(function() {
     });
 
     if ($.urlParam('message') != null) {
-        console.log($.urlParam('message'));
         switch ($.urlParam('message')) {
 	        case 'not-authenticated':
             $('#login-general-notification').append('You are no longer logged in. Please log in to continue.');

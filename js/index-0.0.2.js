@@ -16,7 +16,7 @@ $.client_event_id = null;
 $.log_client_events = false;
 $.env_vars = function () {
     var env_vars = [];
-    var api_url = 'https://api.startupwebapp.com';
+    var api_url = 'https://startupwebapp-api.mosaicmeshai.com';
 
     switch(window.startupwebapp.util.get_window_location_hostname()) {
     case 'localhost':
@@ -28,19 +28,12 @@ $.env_vars = function () {
 	    	api_url = 'http://backend:60767';
 	        break;
     case 'localliveservertestcase.startupwebapp.com':
+        // Selenium functional tests
 	    	api_url = 'http://localliveservertestcaseapi.startupwebapp.com:60767';
 	        break;
 	    case 'localhost.startupwebapp.com':
+        // Local manual testing with custom hosts
 	    	api_url = 'http://localapi.startupwebapp.com:8000';
-	        break;
-	    case 'dev.startupwebapp.com':
-	    	api_url = 'https://devapi.startupwebapp.com';
-	        break;
-	    case 'www.startupwebapp.com':
-	    	api_url = 'https://api.startupwebapp.com';
-	        break;
-	    case 'startupwebapp.mosaicmeshai.com':
-	    	api_url = 'https://startupwebapp-api.mosaicmeshai.com';
 	        break;
 	    default:
 	        break;
@@ -285,10 +278,9 @@ submit_chat_message_success = function( data, textStatus, xhr ) {
         $('.chat-dialogue-header-intro').append('Thank you. We got your message.');
         $('.chat-dialogue-header-message').empty();
         $('.chat-dialogue-header-message').append('We\'ll get back to you ASAP!');
-	    $('#chat-dialogue-go-button-wrapper').append('<b>Name:</b> ' + chat_dialogue_name_field.val());
-	    $('#chat-dialogue-go-button-wrapper').append('<br/><b>Email Address:</b> ' + chat_dialogue_email_address_field.val());
-	    $('#chat-dialogue-go-button-wrapper').append('<br/><b>Message:</b><br><span class="respect-white-space">' + chat_dialogue_message_field.val() + '</span>');
-	    console.log(chat_dialogue_message_field.val());
+	    $('#chat-dialogue-go-button-wrapper').append('<b>Name:</b> ').append($('<span>').text(chat_dialogue_name_field.val()));
+	    $('#chat-dialogue-go-button-wrapper').append('<br/><b>Email Address:</b> ').append($('<span>').text(chat_dialogue_email_address_field.val()));
+	    $('#chat-dialogue-go-button-wrapper').append('<br/><b>Message:</b><br>').append($('<span class="respect-white-space">').text(chat_dialogue_message_field.val()));
 
 	    if (data['put_chat_message'] == 'email_failed') {
             $.log_client_event('ajaxerror', 'put-chat-message-email-failed');
@@ -409,7 +401,7 @@ set_logged_in = function( data, textStatus, xhr ) {
     		//<a id="menu-login-link" href="/login"><menu-item-expanded>Login</menu-item-expanded></a>
     		
     		if (data['member_initials'] != null) {
-    			$('#header-account').append('<div id="header-account-initials" class="header-account-initials">' + data['member_initials'] + '</div>');
+    			$('#header-account').append($('<div id="header-account-initials" class="header-account-initials">').text(data['member_initials']));
     		}			
 
     		$('#menu-login-link').remove();

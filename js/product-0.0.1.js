@@ -333,7 +333,6 @@ product_add_to_cart = function () {
     //console.log('sku_add_to_cart called');
     var selected_sku_id = $('input[name=sku_selection]:checked').val();
     if (selected_sku_id == null) {
-        console.log(first_sku_key);
         selected_sku_id = first_sku_key;
     }
     //console.log('selected_sku_id is ' + selected_sku_id);

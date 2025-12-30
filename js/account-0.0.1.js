@@ -84,9 +84,10 @@ load_account = function( data, textStatus, xhr ) {
         $('#my-orders-sub-header').removeClass('hide');
 
         $('#account-info').append('<div class="account-item"><div class="account-change-password-wrapper"><a href="/account/edit-my-information">Edit My Information</a></div></div>');
-        $('#account-info').append('<div class="account-item"><span class="account-my-information-label">Username</span>: <span class="account-my-information-value">' + data['account_content']['personal_data']['username'] + '</span></div>');
-        $('#account-info').append('<div class="account-item"><span class="account-my-information-label">Name</span>: <span class="account-my-information-value">' + data['account_content']['personal_data']['first_name'] + ' ' + data['account_content']['personal_data']['last_name']  + '</span></div>');
-        $('#account-info').append('<div class="account-item"><span class="account-my-information-label">Email Address</span>: <span class="account-my-information-value">' + data['account_content']['email_data']['email_address'] + '</span></div>');
+        $('#account-info').append($('<div class="account-item"><span class="account-my-information-label">Username</span>: <span class="account-my-information-value"></span></div>').find('.account-my-information-value').text(data['account_content']['personal_data']['username']).end());
+        var nameValue = data['account_content']['personal_data']['first_name'] + ' ' + data['account_content']['personal_data']['last_name'];
+        $('#account-info').append($('<div class="account-item"><span class="account-my-information-label">Name</span>: <span class="account-my-information-value"></span></div>').find('.account-my-information-value').text(nameValue).end());
+        $('#account-info').append($('<div class="account-item"><span class="account-my-information-label">Email Address</span>: <span class="account-my-information-value"></span></div>').find('.account-my-information-value').text(data['account_content']['email_data']['email_address']).end());
         $('#account-info').append('<div id="verify-email" class="account-item"><span class="account-my-information-label">Email Verified</span>: <span id="email-verified-value" class="account-my-information-value">' + email_verified_str + '</span>' + verify_email_button + email_verification_sent_str + '</div>');
 
         $('#communication-preferences-info').append('<div class="account-item"><div class="account-change-password-wrapper"><a href="/account/edit-communication-preferences">Edit Communication Preferences</a></div></div>');
@@ -107,7 +108,9 @@ load_account = function( data, textStatus, xhr ) {
                 var options = { year: 'numeric', month: 'long', day: 'numeric' };
                 var order_date_formatted = order_date.toLocaleDateString('en-US',options);
                 $('#account-orders-' + data['account_content']['orders_data'][order]['order_id']).append('<div class="account-item"><span class="account-my-information-label">Order Date</span>: <span class="account-my-information-value">' + order_date_formatted + '</span></div>');
-                $('#account-orders-' + data['account_content']['orders_data'][order]['order_id']).append('<div class="account-item"><div class="account-change-password-wrapper"><a href="/account/order?identifier=' + data['account_content']['orders_data'][order]['identifier'] + '">View Details</a></div></div>');
+                var viewDetailsLink = $('<a href="/account/order?identifier=">View Details</a>');
+                viewDetailsLink.attr('href', '/account/order?identifier=' + data['account_content']['orders_data'][order]['identifier']);
+                $('#account-orders-' + data['account_content']['orders_data'][order]['order_id']).append($('<div class="account-item"><div class="account-change-password-wrapper"></div></div>').find('.account-change-password-wrapper').append(viewDetailsLink).end());
             }
         }
         else {
