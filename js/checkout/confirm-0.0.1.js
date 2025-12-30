@@ -484,7 +484,9 @@ look_up_anonymous_email_address_callback = function( data, textStatus, xhr ) {
         else {
             change_email_address_span = '';
         }
-        $('#confirmation-email-detail-wrapper').append('<div class="account-item"><div class="confirm-detail-line">An order confirmation/receipt will be sent to: ' + anonymous_email_address_field.val() + '.' + change_email_address_span + '</div></div>');
+        var emailWrapper = $('<div class="account-item"><div class="confirm-detail-line">An order confirmation/receipt will be sent to: </div></div>');
+        emailWrapper.find('.confirm-detail-line').append($('<span>').text(anonymous_email_address_field.val())).append('.' + change_email_address_span);
+        $('#confirmation-email-detail-wrapper').append(emailWrapper);
         $('#change-confirmation-email-address').click(function (event)
         {
             //console.log('change-confirmation-email-address clicked');

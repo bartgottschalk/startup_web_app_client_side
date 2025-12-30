@@ -70,8 +70,6 @@ set_up_create_account_form_listeners = function() {
 };
 
 create_account = function() {
-    console.log('login clicked');
-
     general_error.attr('class', 'login-form-error-text-hidden');
     general_error.empty();
 
@@ -128,8 +126,6 @@ create_account = function() {
     }
     //console.log('terms_of_use_agree_val is ' + terms_of_use_agree_val);
 
-
-    console.log('firstname_val is ' + firstname_val);
     var firstname_valid = $.isNameValid(firstname_val, 30);
     $.display_errors(firstname_valid, firstname_error, firstname_field, 'firstname');
 
@@ -200,14 +196,11 @@ create_account_success = function( data, textStatus, xhr ) {
         //console.log('create_account success');
 
         var next_url_st = '';
-        console.log('$.urlParam(next) is ' + $.urlParam('next'));
         if ($.urlParam('next') != null) {
             next_url_st = $.urlParam('next');
-            console.log('next_url_st is ' + next_url_st);
             window.location = next_url_st;
         }
         else {
-            console.log('next reached');
             window.location = '/account/';
         }
 
