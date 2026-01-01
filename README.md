@@ -18,29 +18,10 @@ This application is designed to showcase e-commerce functionality and serves as 
 **Production Demo:** https://startupwebapp.mosaicmeshai.com (TEST mode only)
 
 # startup_web_app_client_side
-I'm co-founder of a startup which
 
-1. Produces and sells a relatively small quantity of a relatively high number of customizable physical products, and
-2. Has future plans to build a complementary digital product. 
+I'm co-founder of a startup that produces customizable physical products with plans for a complementary digital product. This repository contains a simplified version of the frontend application I built to launch our startup.
 
-Soon after jumping into this idea it was clear we would need a web application to support our product's discovery, selection, customization, purchase and interactive experiences. We looked at using existing marketplaces and web-site building platforms such as Squarespace or Wix. These didn't work for us for a couple of reasons
-
-1. The customizable nature of our products
-2. The large number of individual skus we would be managing
-3. Our customers can create skus dynamically.
-
-This made using “off-the-shelf” solutions unworkable, even for early prototyping and experimentation, and meant we needed to build a custom web application. Among our non-functional requirements were things like
-
-1. The ability to iterate quickly
-2. Security
-3. Reliability
-4. Support growth and scalability (reasonably)
-5. Support future iterative exploration of our digital product
-6. Can’t be so costly that it sinks the business. 
-
-As the only technical co-founder, it landed on me to "figure this out." 
-
-This repository contains a simplified version of the client side application I built to launch our startup. To learn more about this project you can check out [slides from a talk I gave about the technical aspects of this project](https://docs.google.com/presentation/d/18Y_G3asKbeys7s5618N_VJkXCI0ePwJ0vKB_06c-P3w/edit#slide=id.g5820c97b01_0_114) or [slides from a talk I gave demoing use of the project for startup idea validation](https://docs.google.com/presentation/d/1O80AyN6jpFxfooDz8ILfYE1PyYlm917mP2EqYuMf5SE/edit#slide=id.g5820c97b01_0_90).
+**Learn More**: [Technical Overview Slides](https://docs.google.com/presentation/d/18Y_G3asKbeys7s5618N_VJkXCI0ePwJ0vKB_06c-P3w/edit#slide=id.g5820c97b01_0_114) | [Startup Validation Demo](https://docs.google.com/presentation/d/1O80AyN6jpFxfooDz8ILfYE1PyYlm917mP2EqYuMf5SE/edit#slide=id.g5820c97b01_0_90)
 
 ## Quick Start with Docker (Recommended)
 
