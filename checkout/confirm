@@ -47,7 +47,6 @@
                         <tr>
                             <th class="cart-details-item-table-title">Discount Code</th>
                             <th class="cart-details-item-table-title">Value</th>
-                            <th class="cart-details-item-table-quantity">Combinable</th>
                         </tr>
                     </table>
                 </div>

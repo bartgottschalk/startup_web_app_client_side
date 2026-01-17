@@ -171,16 +171,10 @@ load_cart_discount_codes = function( data, textStatus, xhr ) {
 
         for (var discount_code in data['discount_code_data']) {
             var code = data['discount_code_data'][discount_code]['code'];
-            var combinable = data['discount_code_data'][discount_code]['combinable'];
             var description = data['discount_code_data'][discount_code]['description'];
             var discount_amount = data['discount_code_data'][discount_code]['discount_amount'];
             var discount_code_id = data['discount_code_data'][discount_code]['discount_code_id'];
             var discount_applied = data['discount_code_data'][discount_code]['discount_applied'];
-
-            var combinable_str = 'No';
-            if (combinable == true) {
-                combinable_str = 'Yes';
-            }
 
             var value_str = description;
             value_str = value_str.replace('{}', discount_amount);
@@ -192,7 +186,7 @@ load_cart_discount_codes = function( data, textStatus, xhr ) {
                 wont_be_applied_str = '<span class="cart-inventory-note"> [This code cannot be combined or does not qualify for your order.]</span>';
             }
 
-            $('#discount-code-table').append('<tr id="discount_code_row_' + discount_code_id + '"><td class="cart-details-item-table-title' + strikethrough_class + '">' + code + wont_be_applied_str + '</td><td class="cart-details-item-table-title' + strikethrough_class + '">' + value_str + '</td><td class="cart-details-item-table-quantity' + strikethrough_class + '">' + combinable_str + '</td><td class="cart-details-item-table-remove"><span id="discount_code_remove_short_' + discount_code_id + '" discount_code_id="' + discount_code_id + '" class="cart-sku-remove-link cart-sku-remove-link-short">X</span><span id="discount_code_remove_full_' + discount_code_id + '" discount_code_id="' + discount_code_id + '" class="cart-sku-remove-link cart-sku-remove-link-full">REMOVE</span></td></tr>');
+            $('#discount-code-table').append('<tr id="discount_code_row_' + discount_code_id + '"><td class="cart-details-item-table-title' + strikethrough_class + '">' + code + wont_be_applied_str + '</td><td class="cart-details-item-table-title' + strikethrough_class + '">' + value_str + '</td><td class="cart-details-item-table-remove"><span id="discount_code_remove_short_' + discount_code_id + '" discount_code_id="' + discount_code_id + '" class="cart-sku-remove-link cart-sku-remove-link-short">X</span><span id="discount_code_remove_full_' + discount_code_id + '" discount_code_id="' + discount_code_id + '" class="cart-sku-remove-link cart-sku-remove-link-full">REMOVE</span></td></tr>');
 
             $('#discount_code_remove_short_' + discount_code_id).click(function(e){
                 cart_remove_discount_code(e);
