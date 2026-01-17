@@ -1462,6 +1462,9 @@ a.contact-email-link:active {
     background-color: #706E74;
     color: white;
 }
+.cart-discount-codes td.cart-details-item-table-title {
+    padding: 12px 8px;
+}
 .cart-details-item-image {
     display: flex;
     width: 42px;
