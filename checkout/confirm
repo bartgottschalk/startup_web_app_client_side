@@ -41,15 +41,6 @@
                     <div id="shipping-methods" class="account-item"></div>
                     <div id="shipping-method-error" class="login-form-error-text-hidden"></div>
                 </div>
-                <div id="discount-codes-sub-header" class="cart-sub-header">DISCOUNT CODES</div>
-                <div id="discount-code-detail-wrapper" class="cart-details">
-                    <table id="discount-code-table" class="cart-discount-codes">
-                        <tr>
-                            <th class="cart-details-item-table-title">Discount Code</th>
-                            <th class="cart-details-item-table-title">Value</th>
-                        </tr>
-                    </table>
-                </div>
                 <div id="confirm-total-sub-header" class="cart-sub-header">ITEM AND SHIPPING TOTAL COST</div>
                 <div id="confirm-total-detail-wrapper" class="cart-totals-wrapper">
                     <table id="confirm-total-table" class="cart-totals-table">

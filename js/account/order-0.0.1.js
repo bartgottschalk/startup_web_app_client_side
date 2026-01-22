@@ -77,9 +77,28 @@ load_order = function( data, textStatus, xhr ) {
             var sku_id = data['order_data']['order_items']['product_sku_data'][product_sku]['sku_id'];
             var sku_image_url = data['order_data']['order_items']['product_sku_data'][product_sku]['sku_image_url'];
 
+            // Handle discount pricing
+            var original_price_cents = data['order_data']['order_items']['product_sku_data'][product_sku]['original_price_cents'];
+            var discounted_price_cents = data['order_data']['order_items']['product_sku_data'][product_sku]['discounted_price_cents'];
+            var discount_applied = data['order_data']['order_items']['product_sku_data'][product_sku]['discount_applied'];
+
             var item_image_str = '<img alt="' + parent_product__title + '" class="cart-detail-item-image" src="' + sku_image_url + '"></img>';
-            var item_price_each_formatted = '$' + price.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
-            var item_subtotal = price * quantity;
+
+            var item_price_each_formatted = '';
+            var item_subtotal = 0;
+            if (discount_applied) {
+                // Show original price with strikethrough and discounted price
+                var original_price = original_price_cents / 100;
+                var discounted_price = discounted_price_cents / 100;
+                var original_price_formatted = '$' + original_price.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+                var discounted_price_formatted = '$' + discounted_price.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+                item_price_each_formatted = '<del>' + original_price_formatted + '</del> ' + discounted_price_formatted;
+                item_subtotal = discounted_price * quantity;
+            } else {
+                // No discount - show original price only
+                item_price_each_formatted = '$' + price.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+                item_subtotal = price * quantity;
+            }
             var item_subtotal_formatted = '$' + item_subtotal.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
             var item_image_str = '<a href="/product?name=' + parent_product__title_url + '&id=' + parent_product__identifier + '&referrer=order&order_identifier=' + order_identifier + '"><img alt="' + parent_product__title + '" class="cart-details-item-image" src="' + sku_image_url + '"></img></a>';
 
@@ -131,20 +150,48 @@ load_order = function( data, textStatus, xhr ) {
 
         $('#order-total-table').find('tr').remove();
 
-        var item_subtotal_formatted = '$' + parseFloat(data['order_data']['order_totals']['item_subtotal']).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
-        $('#order-total-table').append('<tr><td class="cart-totals-item-table-title">Item Subtotal</td><td id="item_total" class="cart-totals-item-table-price">' + item_subtotal_formatted + '</td></tr>');
+        // Add items row with discount breakdown (matching email format)
+        var item_subtotal = parseFloat(data['order_data']['order_totals']['item_subtotal']);
+        var item_discount = parseFloat(data['order_data']['order_totals']['item_discount'] || 0);
+        var items_row_html = '';
 
-        if (data['order_data']['order_totals']['item_discount'] != null && data['order_data']['order_totals']['item_discount'] != 0) {
-            var item_discount_formatted = '$' + parseFloat(data['order_data']['order_totals']['item_discount']).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
-            $('#order-total-table').append('<tr><td class="cart-totals-item-table-title">Item Discount</td><td id="item_discount_total" class="cart-totals-item-table-price">(' + item_discount_formatted + ')</td></tr>');
+        if (item_discount > 0) {
+            var item_subtotal_formatted = '$' + item_subtotal.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+            var item_discount_formatted = '$' + item_discount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+            var item_total = item_subtotal - item_discount;
+            var item_total_formatted = '$' + item_total.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+            items_row_html = 'Items: ' + item_subtotal_formatted + ' - ' + item_discount_formatted + ' = ' + item_total_formatted;
+        } else {
+            var item_subtotal_formatted = '$' + item_subtotal.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+            items_row_html = 'Items: ' + item_subtotal_formatted;
         }
+        $('#order-total-table').append('<tr><td class="cart-totals-item-table-title">' + items_row_html + '</td><td id="item_total" class="cart-totals-item-table-price"></td></tr>');
 
-        var shipping_subtotal_formatted = '$' + parseFloat(data['order_data']['order_totals']['shipping_subtotal']).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
-        $('#order-total-table').append('<tr><td class="cart-totals-item-table-title">Shipping</td><td id="shipping_method_total" class="cart-totals-item-table-price">' + shipping_subtotal_formatted + '</td></tr>');
+        // Add shipping row with discount breakdown (matching email format)
+        var shipping_subtotal = parseFloat(data['order_data']['order_totals']['shipping_subtotal']);
+        var shipping_discount = parseFloat(data['order_data']['order_totals']['shipping_discount'] || 0);
+        var shipping_row_html = '';
 
-        if (data['order_data']['order_totals']['shipping_discount'] != null && data['order_data']['order_totals']['shipping_discount'] != 0) {
-            var shipping_discount_formatted = '$' + parseFloat(data['order_data']['order_totals']['shipping_discount']).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
-            $('#order-total-table').append('<tr><td class="cart-totals-item-table-table-title">Shipping Discount</td><td id="shipping_method_discount_total" class="cart-totals-item-table-price">(' + shipping_discount_formatted + ')</td></tr>');
+        if (shipping_discount > 0) {
+            var shipping_subtotal_formatted = '$' + shipping_subtotal.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+            var shipping_discount_formatted = '$' + shipping_discount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+            var shipping_total = shipping_subtotal - shipping_discount;
+            var shipping_total_formatted = '$' + shipping_total.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+            shipping_row_html = 'Shipping: ' + shipping_subtotal_formatted + ' - ' + shipping_discount_formatted + ' = ' + shipping_total_formatted;
+            if (shipping_total == 0) {
+                shipping_row_html += ' <span class="cart-inventory-note">(FREE!)</span>';
+            }
+        } else {
+            var shipping_subtotal_formatted = '$' + shipping_subtotal.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+            shipping_row_html = 'Shipping: ' + shipping_subtotal_formatted;
+        }
+        $('#order-total-table').append('<tr><td class="cart-totals-item-table-title">' + shipping_row_html + '</td><td id="shipping_method_total" class="cart-totals-item-table-price"></td></tr>');
+
+        // Add "You saved" message if any discounts were applied
+        var total_discount = item_discount + shipping_discount;
+        if (total_discount > 0) {
+            var total_discount_formatted = '$' + total_discount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+            $('#order-total-table').append('<tr><td colspan="2" class="cart-totals-item-table-title cart-inventory-note">You saved ' + total_discount_formatted + ' with your discount code!</td></tr>');
         }
 
         var order_total_formatted = '$' + parseFloat(data['order_data']['order_totals']['order_total']).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
