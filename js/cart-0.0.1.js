@@ -36,21 +36,6 @@ $(document).ready(function() {
             $.display_page_fatal_error('cart-detail-body', '<div id="account-info" class="account-section-details">We\'re sorry. An error has occurred while loading this page. Please try refreshing the page. If that doesn\'t work, please clear browser cache and cookies and try reloading again.</div>');
         });
 
-    $.ajax({
-        method: 'GET',
-        url: env_vars['api_url'] + '/order/cart-discount-codes',
-        dataType: 'json',
-	    xhrFields: {
-	        withCredentials: true
-	    },
-        success: load_cart_discount_codes
-    })
-        .fail(function() {
-	    //console.log('get account_content failed');
-            $.log_client_event('ajaxerror', 'cart-discount-codes');
-            $.display_page_fatal_error('cart-detail-body', '<div id="account-info" class="account-section-details">We\'re sorry. An error has occurred while loading this page. Please try refreshing the page. If that doesn\'t work, please clear browser cache and cookies and try reloading again.</div>');
-        });
-
     set_up_cart_form_listeners();
 });
 
@@ -75,9 +60,28 @@ load_cart_items = function( data, textStatus, xhr ) {
             var sku_inventory__identifier = data['item_data']['product_sku_data'][product_sku]['sku_inventory__identifier'];
 
             var item_image_str = '<img alt="' + parent_product__title + '" class="cart-detail-item-image" src="' + sku_image_url + '"></img>';
-            var item_price_each_formatted = '$' + parseFloat(price).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
-            var item_subtotal = parseFloat(price) * quantity;
-            var item_subtotal_formatted = '$' + item_subtotal.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
+
+            // Check if discount pricing data is available
+            var discount_applied = data['item_data']['product_sku_data'][product_sku]['discount_applied'] || false;
+            var original_price_cents = data['item_data']['product_sku_data'][product_sku]['original_price_cents'];
+            var discounted_price_cents = data['item_data']['product_sku_data'][product_sku]['discounted_price_cents'];
+
+            var item_price_each_formatted;
+            var item_subtotal;
+            if (discount_applied && original_price_cents && discounted_price_cents) {
+                // Show discounted price with strikethrough on original
+                var original_price = original_price_cents / 100;
+                var discounted_price = discounted_price_cents / 100;
+                var original_formatted = '$' + original_price.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+                var discounted_formatted = '$' + discounted_price.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+                item_price_each_formatted = '<del>' + original_formatted + '</del> ' + discounted_formatted;
+                item_subtotal = discounted_price * quantity;
+            } else {
+                // No discount - show regular price
+                item_price_each_formatted = '$' + parseFloat(price).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+                item_subtotal = parseFloat(price) * quantity;
+            }
+            var item_subtotal_formatted = '$' + item_subtotal.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
             var item_image_str = '<a href="/product?name=' + parent_product__title_url + '&id=' + parent_product__identifier + '&referrer=cart"><img alt="' + parent_product__title + '" class="cart-details-item-image" src="' + sku_image_url + '"></img></a>';
 
             var sku_qty_box = '<input type="text" id="sku_qty_' + sku_id + '" sku_id="' + sku_id + '" class="cart-qty-text-box" maxlength="2" value="' + quantity + '">';
@@ -162,46 +166,21 @@ load_shipping_methods_details = function(shipping_method_dict, shipping_method_s
 
 };
 
-
-load_cart_discount_codes = function( data, textStatus, xhr ) {
-    //console.log(data);
-
-    if (data['cart_found'] == true) {
-        $('#discount-code-table').find('tr:gt(0)').remove();
-
-        for (var discount_code in data['discount_code_data']) {
-            var code = data['discount_code_data'][discount_code]['code'];
-            var description = data['discount_code_data'][discount_code]['description'];
-            var discount_amount = data['discount_code_data'][discount_code]['discount_amount'];
-            var discount_code_id = data['discount_code_data'][discount_code]['discount_code_id'];
-            var discount_applied = data['discount_code_data'][discount_code]['discount_applied'];
-
-            var value_str = description;
-            value_str = value_str.replace('{}', discount_amount);
-
-            var strikethrough_class = '';
-            var wont_be_applied_str = '';
-            if (discount_applied == false) {
-                strikethrough_class = ' strikethrough';
-                wont_be_applied_str = '<span class="cart-inventory-note"> [This code cannot be combined or does not qualify for your order.]</span>';
-            }
-
-            $('#discount-code-table').append('<tr id="discount_code_row_' + discount_code_id + '"><td class="cart-details-item-table-title' + strikethrough_class + '">' + code + wont_be_applied_str + '</td><td class="cart-details-item-table-title' + strikethrough_class + '">' + value_str + '</td><td class="cart-details-item-table-remove"><span id="discount_code_remove_short_' + discount_code_id + '" discount_code_id="' + discount_code_id + '" class="cart-sku-remove-link cart-sku-remove-link-short">X</span><span id="discount_code_remove_full_' + discount_code_id + '" discount_code_id="' + discount_code_id + '" class="cart-sku-remove-link cart-sku-remove-link-full">REMOVE</span></td></tr>');
-
-            $('#discount_code_remove_short_' + discount_code_id).click(function(e){
-                cart_remove_discount_code(e);
-            });
-            $('#discount_code_remove_full_' + discount_code_id).click(function(e){
-                cart_remove_discount_code(e);
-            });
-        }
-        if ($('#discount-code-table tr').length <= 1) {
-            $('#discount-code-table').addClass('hide');
-        }
-        if ($('#discount-code-table tr').length >= 2) {
-            $('#discount-code-table').removeClass('hide');
-        }
-    }
+// Helper function to reload cart totals via AJAX
+var reload_cart_totals = function() {
+    $.ajax({
+        method: 'GET',
+        url: env_vars['api_url'] + '/order/cart-totals',
+        dataType: 'json',
+        xhrFields: {
+            withCredentials: true
+        },
+        success: load_cart_totals
+    })
+        .fail(function() {
+            $.log_client_event('ajaxerror', 'cart-totals-reload');
+            $.display_page_fatal_error('cart-detail-body', '<div id="account-info" class="account-section-details">We\'re sorry. An error has occurred while loading this page. Please try refreshing the page. If that doesn\'t work, please clear browser cache and cookies and try reloading again.</div>');
+        });
 };
 
 load_cart_totals = function( data, textStatus, xhr ) {
@@ -213,20 +192,10 @@ load_cart_totals = function( data, textStatus, xhr ) {
         var item_subtotal_formatted = '$' + parseFloat(data['cart_totals_data']['item_subtotal']).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
         $('#cart-total-table').append('<tr><td class="cart-totals-item-table-title">Item Subtotal</td><td id="item_total" class="cart-totals-item-table-price">' + item_subtotal_formatted + '</td></tr>');
 
-        if (data['cart_totals_data']['item_discount'] != null && data['cart_totals_data']['item_discount'] != 0) {
-            var item_discount_formatted = '$' + parseFloat(data['cart_totals_data']['item_discount']).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
-            $('#cart-total-table').append('<tr><td class="cart-totals-item-table-title">Item Discount</td><td id="item_discount_total" class="cart-totals-item-table-price">(' + item_discount_formatted + ')</td></tr>');
-        }
-
         var shipping_subtotal_formatted = '$' + parseFloat(data['cart_totals_data']['shipping_subtotal']).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
         $('#cart-total-table').append('<tr><td class="cart-totals-item-table-title">Shipping</td><td id="shipping_method_total" class="cart-totals-item-table-price">' + shipping_subtotal_formatted + '</td></tr>');
 
-        if (data['cart_totals_data']['shipping_discount'] != null && data['cart_totals_data']['shipping_discount'] != 0) {
-            var shipping_discount_formatted = '$' + parseFloat(data['cart_totals_data']['shipping_discount']).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
-            $('#cart-total-table').append('<tr><td class="cart-totals-item-table-title">Shipping Discount</td><td id="shipping_method_discount_total" class="cart-totals-item-table-price">(' + shipping_discount_formatted + ')</td></tr>');
-        }
-
-        var cart_total_formatted = '$' + parseFloat(data['cart_totals_data']['cart_total']).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');			
+        var cart_total_formatted = '$' + parseFloat(data['cart_totals_data']['cart_total']).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
         $('#cart-total-table').append('<tr><td class="cart-totals-item-table-title"><b>Cart Total</b></td><td id="cart_total" class="cart-totals-item-table-price"><b>' + cart_total_formatted + '</b></td></tr>');
 
         $('#cart-total-table').append('<tr><td class="cart-totals-item-table-title cart-inventory-note">Note: State and local sales tax is included</td></tr>');
@@ -236,11 +205,6 @@ load_cart_totals = function( data, textStatus, xhr ) {
 
 set_up_cart_form_listeners = function() {
     //console.log('set_up_cart_form_listeners called');
-	
-    $('#apply-discount-code-link').click(function(e){
-        cart_apply_discount_code(e);
-    });
-    $.bind_key_to_form_submit_button($('#new_discount_code'), 'enterKey', $('#apply-discount-code-link'), 13);
 };
 
 update_sku_quantity = function(event) {
@@ -299,14 +263,14 @@ update_sku_quantity = function(event) {
             });
     }
 };
+
 cart_update_sku_quantity_callback = function( data, textStatus, xhr ) {
     //console.log(data);
     //console.log('cart_update_sku_quantity_callback called');
     if (data['cart_update_sku_quantity'] == 'success') {
         var sku_subtotal_formatted = '$' + parseFloat(data['sku_subtotal']).toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
         $('#sku_subtotal_' + data['sku_id']).html(sku_subtotal_formatted);
-        load_cart_discount_codes(data, textStatus, xhr);
-        load_cart_totals(data, textStatus, xhr);
+        reload_cart_totals(); // Reload totals with fresh data
 
         update_cart_item_quantity();
         cart_check_for_valid_checkout_conditions();
@@ -385,7 +349,6 @@ cart_remove_sku_callback = function( data, textStatus, xhr ) {
             $( '#shipping-methods' ).change(cart_update_shipping_method);
         }
 
-        load_cart_discount_codes(data, textStatus, xhr);
         load_cart_totals(data, textStatus, xhr);
         $.set_cart_item_counter(data['cart_item_count']);
         cart_item_count -= 1;
@@ -403,161 +366,6 @@ cart_remove_sku_callback = function( data, textStatus, xhr ) {
         else if (data['errors']['error'] == 'cart-not-found') {
             $.log_client_event('ajaxerror', 'cart-remove-sku-cart-not-found');
         }
-    }
-};
-
-cart_apply_discount_code = function(event) {
-    $('#new-discount-code-error').attr('class', 'login-form-error-text-hidden');
-    $('#new-discount-code-error').empty();
-    var discount_code_valid = $.isDiscountCodeValid($('#new_discount_code').val());
-    $.display_errors(discount_code_valid, $('#new-discount-code-error'), $('#new_discount_code'), 'new-discount-code-error-', false, 'cart-discount-code-text-box');
-
-    if (discount_code_valid.length == 0) {
-        var json_data = {'discount_code_id':$('#new_discount_code').val()
-        };
-
-        $.ajax({
-            method: 'POST',
-            url: env_vars['api_url'] + '/order/cart-apply-discount-code',
-            dataType: 'json',
-		    xhrFields: {
-		        withCredentials: true
-		    },
-		    data: json_data,
-            success: cart_apply_discount_code_callback,
-            beforeSend: function(request) {
-			    //console.log('in beforeSend');
-			    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
-		    }
-        })
-            .fail(function(xhr, textStatus, errorThrown) {
-		    //console.log('post update-my-information failed');
-	        //console.log('xhr.status is ' + xhr.status);
-                $.log_client_event('ajaxerror', 'cart-apply-discount-code');
-                switch (xhr.status) {
-		        case 403:
-		           // handle unauthorized
-                    if (token_retried == false) {
-                        //console.log('retrying token');
-                        token_retried = true;
-                        $.get_token(update_sku_quantity);
-                    }
-                    else {
-			        	$.display_page_fatal_error('cart-detail-body');
-			           	break;
-			    	}
-		        	break;
-		        default:
-		        	$.display_page_fatal_error('cart-detail-body');
-		           	break;
-		    }	        
-            });
-    }
-};
-cart_apply_discount_code_callback = function( data, textStatus, xhr ) {
-    //console.log(data);
-    //console.log('cart_apply_discount_code_callback called');
-
-    if (data['cart_apply_discount_code'] == 'success') {
-        //console.log('cart_apply_discount_code_callback success');
-        $('#new_discount_code').val('');
-
-        load_cart_discount_codes(data, textStatus, xhr);
-        load_cart_totals(data, textStatus, xhr);
-    }
-    else {
-        //console.log('cart_apply_discount_code_callback error');
-        var errors = [];
-        if (data['errors']['error'] == 'cart-discount-code-not-found') {
-            errors.push({'type': 'cart-discount-code-not-found','description': 'This discount code was not found.'});
-            $.log_client_event('ajaxerror', 'cart-apply-discount-code-discount-code-not-found');
-        }
-        else if (data['errors']['error'] == 'cart-discount-code-not-active') {
-            errors.push({'type': 'cart-discount-code-not-active','description': 'This discount code is not active.'});
-            $.log_client_event('ajaxerror', 'cart-apply-discount-code-discount-code-not-active');
-        }
-        else if (data['errors']['error'] == 'cart-discount-code-already-applied') {
-            errors.push({'type': 'cart-discount-code-already-applied','description': 'This discount code has already been applied to your cart.'});
-            $.log_client_event('ajaxerror', 'cart-apply-discount-code-discount-code-already-applied');
-        }
-        else if (data['errors']['error'] == 'discount-code-required') {
-            errors.push({'type': 'discount-code-required','description': 'Discount code is required.'});
-            $.log_client_event('ajaxerror', 'cart-apply-discount-code-discount-code-required');
-        }
-        else if (data['errors']['error'] == 'cart-not-found') {
-            errors.push({'type': 'cart-not-found','description': 'There was an error processing your request.'});
-            $.log_client_event('ajaxerror', 'cart-apply-discount-code-cart-not-found');
-        }
-        $.display_errors(errors, $('#new-discount-code-error'), $('#new_discount_code'), 'new-discount-code-error-', false, 'cart-discount-code-text-box');
-    }
-};
-
-cart_remove_discount_code = function(event) {
-    var discount_code_id = $(event.target).attr('discount_code_id');
-    var json_data = {'discount_code_id':discount_code_id
-    };
-
-    $.ajax({
-        method: 'POST',
-        url: env_vars['api_url'] + '/order/cart-remove-discount-code',
-        dataType: 'json',
-	    xhrFields: {
-	        withCredentials: true
-	    },
-	    data: json_data,
-        success: cart_remove_discount_code_callback,
-        beforeSend: function(request) {
-		    //console.log('in beforeSend');
-		    request.setRequestHeader('X-CSRFToken', $.getCookie('csrftoken'));
-	    }
-    })
-        .fail(function(xhr, textStatus, errorThrown) {
-	    //console.log('post update-my-information failed');
-        //console.log('xhr.status is ' + xhr.status);
-            $.log_client_event('ajaxerror', 'cart-remove-discount-code');
-            switch (xhr.status) {
-	        case 403:
-	           // handle unauthorized
-                if (token_retried == false) {
-                    //console.log('retrying token');
-                    token_retried = true;
-                    $.get_token(cart_remove_discount_code);
-                }
-                else {
-		        	$.display_page_fatal_error('cart-detail-body');
-		           	break;
-		    	}
-	        	break;
-	        default:
-	        	$.display_page_fatal_error('cart-detail-body');
-	           	break;
-	    }	        
-        });
-};
-cart_remove_discount_code_callback = function( data, textStatus, xhr ) {
-    //console.log(data);
-    //console.log('cart_remove_discount_code_callback called');
-
-    if (data['cart_remove_discount_code'] == 'success') {
-        load_cart_discount_codes(data, textStatus, xhr);
-        load_cart_totals(data, textStatus, xhr);
-    }
-    else {
-        //console.log('cart_remove_discount_code_callback error');
-        var errors = [];
-        if (data['errors']['error'] == 'cart-discount-code-not-found') {
-            errors.push({'type': 'cart-discount-code-not-found','description': 'This discount code was not found.'});
-            $.log_client_event('ajaxerror', 'cart-remove-discount-code-not-found');
-        }
-        else if (data['errors']['error'] == 'discount-code-required') {
-            errors.push({'type': 'discount-code-required','description': 'Discount code is required.'});
-            $.log_client_event('ajaxerror', 'cart-remove-discount-code-discount-code-required');
-        }
-        else if (data['errors']['error'] == 'cart-not-found') {
-            errors.push({'type': 'cart-not-found','description': 'There was an error processing your request.'});
-            $.log_client_event('ajaxerror', 'cart-remove-discount-code-cart-not-found');
-        }
-        $.display_errors(errors, $('#new-discount-code-error'), $('#new_discount_code'), 'new-discount-code-error-', false, 'cart-discount-code-text-box');
     }
 };
 
@@ -613,8 +421,7 @@ cart_update_shipping_method_callback = function( data, textStatus, xhr ) {
     //console.log('cart_update_shipping_method_callback called');
 
     if (data['cart_update_shipping_method'] == 'success') {
-        load_cart_discount_codes(data, textStatus, xhr);
-        load_cart_totals(data, textStatus, xhr);
+        reload_cart_totals();
     }
     else {
         //console.log('cart_update_shipping_method_callback error');
@@ -745,9 +552,6 @@ show_empty_cart = function() {
     $('#item-information-detail-wrapper').remove();
     $('#shipping-cost-sub-header').remove();
     $('#shipping-information').remove();
-    $('#discount-codes-sub-header').remove();
-    $('#discount-codes-new').remove();
-    $('#discount-code-detail-wrapper').remove();
     $('#cart-total-sub-header').remove();
     $('#cart-total-detail-wrapper').remove();
     $('#cart-checkout-button-wrapper-bottom').remove();

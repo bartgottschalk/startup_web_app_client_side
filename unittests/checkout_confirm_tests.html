@@ -15,14 +15,37 @@
 	<script src="../js/utilities/utilities-0.0.1.js"></script>
 	<script src="../js/utilities/form-utilities-0.0.1.js"></script>
 	<script>
-		// Mock $.ajax BEFORE loading confirm-0.0.1.js to prevent auto-running AJAX calls
+		// Mock $.ajax and other functions BEFORE loading confirm-0.0.1.js to prevent auto-running AJAX calls
 		var originalAjax = $.ajax;
 		$.ajax = function(options) {
-			// Silently ignore AJAX calls during initial page load
-			return {
-				fail: function() { return this; }
+			// Return mock data for specific endpoints to prevent errors
+			var mockPromise = {
+				fail: function(callback) { return this; },
+				done: function(callback) { return this; }
 			};
+
+			// If there's a success callback and it's a confirm-totals call, provide mock data
+			if (options.success && options.url && options.url.includes('/order/confirm-totals')) {
+				setTimeout(function() {
+					options.success({
+						cart_found: true,
+						confirm_totals_data: {
+							item_subtotal: '0.00',
+							shipping_subtotal: '0.00',
+							cart_total: '0.00'
+						}
+					});
+				}, 0);
+			}
+
+			return mockPromise;
 		};
+		// Mock other utility functions that may be called
+		$.get_token = function() {};
+		$.log_client_event = function() {};
+		$.display_page_fatal_error = function() {};
+		// Mock loginStatusReady promise
+		$.loginStatusReady = $.Deferred().resolve().promise();
 	</script>
 	<script src="../js/checkout/confirm-0.0.1.js"></script>
 	<script>

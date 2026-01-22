@@ -48,21 +48,6 @@
                     <div id="shipping-methods" class="account-item"><span class="account-my-information-label">Shipping Option:</span></div>
                     <div id="shipping-method-error" class="login-form-error-text-hidden"></div>
                 </div>
-                <div id="discount-codes-sub-header" class="cart-sub-header">DISCOUNT CODES</div>
-                <div id="discount-codes-new" class="account-section-details">
-                    <div class="account-item"><input type="text" id="new_discount_code" class="cart-discount-code-text-box" placeholder="enter discount code" maxlength="100" value=""><span id="apply-discount-code-link" class="cart-apply-discount-code-alink">APPLY</span></div>
-                    <div id="new-discount-code-error" class="login-form-error-text-hidden"></div>
-                </div>
-
-                <div id="discount-code-detail-wrapper" class="cart-details">
-                    <table id="discount-code-table" class="cart-discount-codes">
-                        <tr>
-                            <th class="cart-details-item-table-title">Discount Code</th>
-                            <th class="cart-details-item-table-title">Value</th>
-                            <th class="cart-details-item-table-remove"></th>
-                        </tr>
-                    </table>
-                </div>
                 <div id="cart-total-sub-header" class="cart-sub-header">ITEM AND SHIPPING TOTAL COST</div>
                 <div id="cart-total-detail-wrapper" class="cart-totals-wrapper">
                     <table id="cart-total-table" class="cart-totals-table">
